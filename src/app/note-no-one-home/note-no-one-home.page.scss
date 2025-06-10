@@ -1,0 +1,17 @@
+/* Styles for Note No One Home Page */
+
+.square-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 120px; /* Adjusted height for better fit */
+  width: 100%; /* Make it responsive */
+  aspect-ratio: 1; /* Ensure the card is a square */
+  margin: 8px auto; /* Add some spacing */
+}
+
+ion-card-title {
+  font-size: 1.2rem; /* Adjust font size */
+  font-weight: bold;
+}

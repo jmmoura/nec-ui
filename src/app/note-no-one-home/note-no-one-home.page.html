@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button> <!-- Back button -->
+    </ion-buttons>
+    <ion-title>Anotar Não em Casa</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <h2 style="text-align: center; margin-top: 16px;">Selecione o território</h2> <!-- Added label -->
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="4" *ngFor="let territory of territories"> <!-- Adjusted to allow 3 cards per row -->
+        <ion-card (click)="selectTerritory(territory)" class="square-card">
+          <ion-card-header>
+            <ion-card-title>{{ territory.number }}</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

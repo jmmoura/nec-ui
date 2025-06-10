@@ -1,0 +1,46 @@
+.warning-message {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--ion-color-danger, #ff0000);
+  margin: 16px 0;
+}
+
+.square-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  width: 100%;
+  aspect-ratio: 1;
+  text-align: center;
+  background-color: var(--ion-card-background, #ffffff);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.block-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--ion-text-color, #000);
+}
+
+.dashboard {
+  margin: 16px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: center;
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}

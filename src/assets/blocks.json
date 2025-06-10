@@ -1,0 +1,186 @@
+{
+  "blocks": [
+    {
+      "territoryId": 1,
+      "blockNumber": 1,
+      "houses": [
+        { "street": "Main St", "number": 1, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Main St", "number": 2, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "M" },
+        { "street": "Broadway", "number": 3, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Broadway", "number": 4, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "A" }
+      ]
+    },
+    {
+      "territoryId": 1,
+      "blockNumber": 2,
+      "houses": [
+        { "street": "Elm St", "number": 5, "visited": false, "readOnly": true, "visitDate": null, "visitTime": null },
+        { "street": "Elm St", "number": 6, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Park Ave", "number": 7, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Park Ave", "number": 8, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "E" }
+      ]
+    },
+    {
+      "territoryId": 1,
+      "blockNumber": 3,
+      "houses": [
+        { "street": "Pine St", "number": 5, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Pine St", "number": 6, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "A" }
+      ]
+    },
+    {
+      "territoryId": 1,
+      "blockNumber": 4,
+      "houses": [
+        { "street": "Oak St", "number": 7, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Oak St", "number": 8, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "E" }
+      ]
+    },
+    {
+      "territoryId": 2,
+      "blockNumber": 1,
+      "houses": [
+        { "street": "Cedar St", "number": 9, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Cedar St", "number": 10, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "N" },
+        { "street": "5th Ave", "number": 11, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "5th Ave", "number": 12, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "M" }
+      ]
+    },
+    {
+      "territoryId": 2,
+      "blockNumber": 2,
+      "houses": [
+        { "street": "Maple St", "number": 11, "visited": false, "readOnly": true, "visitDate": null, "visitTime": null },
+        { "street": "Maple St", "number": 12, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null }
+      ]
+    },
+    {
+      "territoryId": 2,
+      "blockNumber": 3,
+      "houses": [
+        { "street": "Birch St", "number": 13, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Birch St", "number": 14, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "M" }
+      ]
+    },
+    {
+      "territoryId": 2,
+      "blockNumber": 4,
+      "houses": [
+        { "street": "Spruce St", "number": 15, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Spruce St", "number": 16, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "A" }
+      ]
+    },
+    {
+      "territoryId": 3,
+      "blockNumber": 1,
+      "houses": [
+        { "street": "Willow St", "number": 17, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Willow St", "number": 18, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "E" }
+      ]
+    },
+    {
+      "territoryId": 3,
+      "blockNumber": 2,
+      "houses": [
+        { "street": "Ash St", "number": 19, "visited": false, "readOnly": true, "visitDate": null, "visitTime": null },
+        { "street": "Ash St", "number": 20, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "6th Ave", "number": 21, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "6th Ave", "number": 22, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "A" }
+      ]
+    },
+    {
+      "territoryId": 3,
+      "blockNumber": 3,
+      "houses": [
+        { "street": "Chestnut St", "number": 21, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Chestnut St", "number": 22, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "M" }
+      ]
+    },
+    {
+      "territoryId": 3,
+      "blockNumber": 4,
+      "houses": [
+        { "street": "Poplar St", "number": 23, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Poplar St", "number": 24, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "A" }
+      ]
+    },
+    {
+      "territoryId": 4,
+      "blockNumber": 1,
+      "houses": [
+        { "street": "Fir St", "number": 25, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Fir St", "number": 26, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "M" }
+      ]
+    },
+    {
+      "territoryId": 4,
+      "blockNumber": 2,
+      "houses": [
+        { "street": "Cypress St", "number": 27, "visited": false, "readOnly": true, "visitDate": null, "visitTime": null },
+        { "street": "Cypress St", "number": 28, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null }
+      ]
+    },
+    {
+      "territoryId": 4,
+      "blockNumber": 3,
+      "houses": [
+        { "street": "Redwood St", "number": 29, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Redwood St", "number": 30, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "A" },
+        { "street": "7th Ave", "number": 31, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "7th Ave", "number": 32, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "E" }
+      ]
+    },
+    {
+      "territoryId": 5,
+      "blockNumber": 1,
+      "houses": [
+        { "street": "Sequoia St", "number": 31, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Sequoia St", "number": 32, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "E" }
+      ]
+    },
+    {
+      "territoryId": 5,
+      "blockNumber": 2,
+      "houses": [
+        { "street": "Palm St", "number": 33, "visited": false, "readOnly": true, "visitDate": null, "visitTime": null },
+        { "street": "Palm St", "number": 34, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "8th Ave", "number": 35, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "8th Ave", "number": 36, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "M" }
+      ]
+    },
+    {
+      "territoryId": 5,
+      "blockNumber": 3,
+      "houses": [
+        { "street": "Magnolia St", "number": 35, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Magnolia St", "number": 36, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "M" }
+      ]
+    },
+    {
+      "territoryId": 6,
+      "blockNumber": 1,
+      "houses": [
+        { "street": "Hickory St", "number": 37, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Hickory St", "number": 38, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "N" }
+      ]
+    },
+    {
+      "territoryId": 6,
+      "blockNumber": 2,
+      "houses": [
+        { "street": "Walnut St", "number": 39, "visited": false, "readOnly": true, "visitDate": null, "visitTime": null },
+        { "street": "Walnut St", "number": 40, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null }
+      ]
+    },
+    {
+      "territoryId": 6,
+      "blockNumber": 3,
+      "houses": [
+        { "street": "Beech St", "number": 41, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "Beech St", "number": 42, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "A" },
+        { "street": "9th Ave", "number": 43, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
+        { "street": "9th Ave", "number": 44, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "N" }
+      ]
+    }
+  ]
+}

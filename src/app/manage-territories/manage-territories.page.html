@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Gerenciar Territórios</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="dashboard">
+    <ion-card>
+      <ion-card-content>
+        <ion-list>
+          <ion-item>
+            <ion-label><strong>Total de cartões:</strong></ion-label>
+            <ion-note slot="end">{{ totalTerritories }}</ion-note>
+          </ion-item>
+          <ion-item>
+            <ion-label><strong>Cartões designados:</strong></ion-label>
+            <ion-note slot="end">{{ assignedTerritories }} ({{ (assignedTerritories / totalTerritories) * 100 | number:'1.0-2' }}%)</ion-note>
+          </ion-item>
+          <ion-item>
+            <ion-label><strong>Cartões livres:</strong></ion-label>
+            <ion-note slot="end">{{ unassignedTerritories }} ({{ (unassignedTerritories / totalTerritories) * 100 | number:'1.0-2' }}%)</ion-note>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Territórios</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6" size-md="4" *ngFor="let territory of territories">
+            <ion-card (click)="openEditTerritoryModal(territory)">
+              <ion-card-header>
+                <ion-card-title>
+                  <ion-text class="text-center">
+                    <strong>{{ territory.number }}</strong>
+                  </ion-text>
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content class="text-center">
+                <p><strong>{{ territory.assignedTo || '' }}</strong></p>
+                <p><strong>{{ territory.assignmentDate || '' }}</strong></p>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Edit Territory Modal -->
+  <ion-modal [isOpen]="isEditTerritoryModalOpen" (ionModalDidDismiss)="closeEditTerritoryModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Editar Território</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeEditTerritoryModal()">Fechar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content *ngIf="selectedTerritory">
+        <form (ngSubmit)="saveTerritory()">
+          <ion-item>
+            <ion-label position="stacked">Nome do Território</ion-label>
+            <ion-input [(ngModel)]="selectedTerritory.name" name="name" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Número do Território</ion-label>
+            <ion-input [(ngModel)]="selectedTerritory.number" name="number" required type="number"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Designado para</ion-label>
+            <ion-input [(ngModel)]="selectedTerritory.assignedTo" name="assignedTo"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Data de Designação</ion-label>
+            <ion-input [(ngModel)]="selectedTerritory.assignmentDate" name="assignmentDate" type="date"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Mensagem de Aviso</ion-label>
+            <ion-textarea [(ngModel)]="selectedTerritory.warningMessage" name="warningMessage"></ion-textarea>
+          </ion-item>
+          <ion-button expand="block" type="submit">Salvar</ion-button>
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

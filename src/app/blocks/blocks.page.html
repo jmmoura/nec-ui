@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/territory-details"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ territory?.name }} - {{ territory?.number }} / Quadra {{ block }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Warning Message -->
+  <div *ngIf="territory?.warningMessage" class="warning-message">
+    {{ territory.warningMessage }}
+  </div>
+
+  <!-- Dashboard -->
+  <div class="dashboard">
+    <ion-card>
+      <ion-card-content>
+        <ion-list>
+          <ion-item>
+            <ion-label><strong>Casas da quadra:</strong></ion-label>
+            <ion-note slot="end">{{ getTotalHouses() }}</ion-note>
+          </ion-item>
+          <ion-item>
+            <ion-label><strong>Casas faladas:</strong></ion-label>
+            <ion-note slot="end">
+              {{ getVisitedHouses() }} ({{ getVisitedPercentage() }}%)
+            </ion-note>
+          </ion-item>
+          <ion-item>
+            <ion-label><strong>Não em casa:</strong></ion-label>
+            <ion-note slot="end">
+              {{ getNoOneHomeHouses() }} ({{ getNoOneHomePercentage() }}%)
+            </ion-note>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Houses Table -->
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" *ngFor="let street of getUniqueStreets()">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>{{ street }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <table>
+              <thead>
+                <tr>
+                  <th>N°</th>
+                  <th>Visitada?</th>
+                  <th>Data</th>
+                  <th>Turno</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let house of getHousesByStreet(street)">
+                  <td>{{ house.number }}</td>
+                  <td>
+                    <ion-checkbox
+                      *ngIf="!house.readOnly"
+                      [checked]="house.visited"
+                      (ionChange)="markVisited(house, $event)"
+                    ></ion-checkbox>
+                    <span *ngIf="house.readOnly">Não bater</span>
+                  </td>
+                  <td>{{ house.visitDate || '' }}</td>
+                  <td>{{ house.visitTime || '' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

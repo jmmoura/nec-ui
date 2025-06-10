@@ -1,0 +1,37 @@
+/* filepath: /Users/i548587/Documents/personal/projects/nec-ui/src/app/territory-details/territory-details.page.scss */
+.square-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px; /* Fixed height */
+  width: 100%; /* Full width of the column */
+  aspect-ratio: 1; /* Ensures the card is square */
+  text-align: center;
+  background-color: var(--ion-card-background, #ffffff);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.block-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--ion-text-color, #000);
+}
+
+.warning-message {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--ion-color-danger, #ff0000);
+  margin: 16px 0;
+}
+
+.labels {
+  text-align: center;
+  font-size: 1rem;
+  margin: 16px 0;
+}
+
+.labels p {
+  margin: 8px 0;
+}

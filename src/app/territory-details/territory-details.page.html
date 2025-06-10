@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/note-no-one-home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Território {{ territory?.name }} - {{ territory?.number }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Warning Messages -->
+  <div *ngIf="warningMessage" class="warning-message">
+    {{ warningMessage }}
+  </div>
+
+  <!-- Labels -->
+  <div class="labels">
+    <p><strong>Designado para:</strong> {{ assignedTo || 'N/A' }}</p>
+    <p><strong>Data de designação:</strong> {{ assignmentDate || 'N/A' }} ({{ daysSinceAssignment }} dias)</p>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="dashboard">
+    <ion-card>
+      <ion-card-content>
+        <ion-list>
+          <ion-item>
+            <ion-label><strong>Casas do território:</strong></ion-label>
+            <ion-note slot="end">{{ totalHouses }}</ion-note>
+          </ion-item>
+          <ion-item>
+            <ion-label><strong>Casas faladas:</strong></ion-label>
+            <ion-note slot="end">{{ visitedHouses }} ({{ visitedPercentage }}%)</ion-note>
+          </ion-item>
+          <ion-item>
+            <ion-label><strong>Não em casa:</strong></ion-label>
+            <ion-note slot="end">{{ noOneHomeHouses }} ({{ noOneHomePercentage }}%)</ion-note>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Block Grid -->
+  <h2 style="text-align: center; margin-top: 16px;">Selecione uma quadra</h2>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="4" *ngFor="let block of blocks">
+        <ion-card (click)="selectBlock(block)" class="square-card">
+          <ion-card-content>
+            <div class="block-text">{{ block }}</div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
