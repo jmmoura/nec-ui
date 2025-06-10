@@ -1,16 +1,42 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { HttpClientModule, HttpClient } from '@angular/common/http'; // Import HttpClientModule
-import { ChangeDetectorRef } from '@angular/core';
-import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+
+// Import standalone Ionic components
+import { IonList, IonModal, IonNote, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonGrid, IonRow, IonCol, IonItem, IonLabel, IonButton, IonInput, IonTextarea } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-manage-territories',
   templateUrl: './manage-territories.page.html',
   styleUrls: ['./manage-territories.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, HttpClientModule, FormsModule], // Add FormsModule here
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    FormsModule,
+    IonModal,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonBackButton,
+    IonTitle,
+    IonContent,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonItem,
+    IonLabel,
+    IonButton,
+    IonInput,
+    IonTextarea,
+    IonList,
+    IonNote
+  ],
 })
 export class ManageTerritoriesPage implements OnInit {
   territories: any[] = [];
