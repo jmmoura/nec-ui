@@ -31,3 +31,12 @@
   font-size: 16px; /* Adjust font size for better readability */
   border-radius: 8px; /* Optional: Add rounded corners */
 }
+
+.clickable-card {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.clickable-card:hover {
+  transform: scale(1.05);
+}
