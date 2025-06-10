@@ -47,7 +47,7 @@
               </ion-card-header>
               <ion-card-content class="text-center">
                 <p><strong>{{ territory.assignedTo || '' }}</strong></p>
-                <p><strong>{{ territory.assignmentDate || '' }}</strong></p>
+                <p><strong>{{ territory.assignmentDate | date:'dd/MM/yyyy' || '' }}</strong></p>
               </ion-card-content>
             </ion-card>
           </ion-col>
@@ -84,7 +84,7 @@
           </ion-item>
           <ion-item>
             <ion-label position="stacked">Data de Designação</ion-label>
-            <ion-input [(ngModel)]="selectedTerritory.assignmentDate" name="assignmentDate" type="date"></ion-input>
+            <ion-input [ngModel]="selectedTerritory.assignmentDate" (ngModelChange)="selectedTerritory.assignmentDate = $event" name="assignmentDate" type="date"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label position="stacked">Mensagem de Aviso</ion-label>

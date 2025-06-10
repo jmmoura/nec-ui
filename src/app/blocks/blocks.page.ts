@@ -106,7 +106,7 @@ export class BlocksPage implements OnInit {
       if (event.detail.checked) {
         // Mark as visited
         house.visited = true;
-        house.visitDate = new Date().toLocaleDateString();
+        house.visitDate = new Date().toLocaleDateString("pt-BR");
         house.visitTime = this.getTimeOfDay();
       } else {
         // Clear date and time when unchecked

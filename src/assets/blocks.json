@@ -7,7 +7,7 @@
         { "street": "Main St", "number": 1, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
         { "street": "Main St", "number": 2, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "M" },
         { "street": "Broadway", "number": 3, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
-        { "street": "Broadway", "number": 4, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "A" }
+        { "street": "Broadway", "number": 4, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "T" }
       ]
     },
     {
@@ -17,7 +17,7 @@
         { "street": "Elm St", "number": 5, "visited": false, "readOnly": true, "visitDate": null, "visitTime": null },
         { "street": "Elm St", "number": 6, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
         { "street": "Park Ave", "number": 7, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
-        { "street": "Park Ave", "number": 8, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "E" }
+        { "street": "Park Ave", "number": 8, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "N" }
       ]
     },
     {
@@ -25,7 +25,7 @@
       "blockNumber": 3,
       "houses": [
         { "street": "Pine St", "number": 5, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
-        { "street": "Pine St", "number": 6, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "A" }
+        { "street": "Pine St", "number": 6, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "T" }
       ]
     },
     {
@@ -33,7 +33,7 @@
       "blockNumber": 4,
       "houses": [
         { "street": "Oak St", "number": 7, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
-        { "street": "Oak St", "number": 8, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "E" }
+        { "street": "Oak St", "number": 8, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "N" }
       ]
     },
     {
@@ -67,7 +67,7 @@
       "blockNumber": 4,
       "houses": [
         { "street": "Spruce St", "number": 15, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
-        { "street": "Spruce St", "number": 16, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "A" }
+        { "street": "Spruce St", "number": 16, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "T" }
       ]
     },
     {
@@ -75,7 +75,7 @@
       "blockNumber": 1,
       "houses": [
         { "street": "Willow St", "number": 17, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
-        { "street": "Willow St", "number": 18, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "E" }
+        { "street": "Willow St", "number": 18, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "N" }
       ]
     },
     {
@@ -85,7 +85,7 @@
         { "street": "Ash St", "number": 19, "visited": false, "readOnly": true, "visitDate": null, "visitTime": null },
         { "street": "Ash St", "number": 20, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
         { "street": "6th Ave", "number": 21, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
-        { "street": "6th Ave", "number": 22, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "A" }
+        { "street": "6th Ave", "number": 22, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "T" }
       ]
     },
     {
@@ -101,7 +101,7 @@
       "blockNumber": 4,
       "houses": [
         { "street": "Poplar St", "number": 23, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
-        { "street": "Poplar St", "number": 24, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "A" }
+        { "street": "Poplar St", "number": 24, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "T" }
       ]
     },
     {
@@ -125,9 +125,9 @@
       "blockNumber": 3,
       "houses": [
         { "street": "Redwood St", "number": 29, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
-        { "street": "Redwood St", "number": 30, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "A" },
+        { "street": "Redwood St", "number": 30, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "T" },
         { "street": "7th Ave", "number": 31, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
-        { "street": "7th Ave", "number": 32, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "E" }
+        { "street": "7th Ave", "number": 32, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "N" }
       ]
     },
     {
@@ -135,7 +135,7 @@
       "blockNumber": 1,
       "houses": [
         { "street": "Sequoia St", "number": 31, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
-        { "street": "Sequoia St", "number": 32, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "E" }
+        { "street": "Sequoia St", "number": 32, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "N" }
       ]
     },
     {
@@ -177,7 +177,7 @@
       "blockNumber": 3,
       "houses": [
         { "street": "Beech St", "number": 41, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
-        { "street": "Beech St", "number": 42, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "A" },
+        { "street": "Beech St", "number": 42, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "T" },
         { "street": "9th Ave", "number": 43, "visited": false, "readOnly": false, "visitDate": null, "visitTime": null },
         { "street": "9th Ave", "number": 44, "visited": true, "readOnly": false, "visitDate": "09/06/2025", "visitTime": "N" }
       ]

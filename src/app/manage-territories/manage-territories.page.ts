@@ -24,7 +24,7 @@ export class ManageTerritoriesPage implements OnInit {
   isEditTerritoryModalOpen = false;
   selectedTerritory: any = null;
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.loadTerritories();
@@ -72,7 +72,6 @@ export class ManageTerritoriesPage implements OnInit {
     console.log('Opening edit modal for territory:', territory);
     this.selectedTerritory = { ...territory }; // Clone the territory to avoid direct mutation
     this.isEditTerritoryModalOpen = true;
-    this.cdr.detectChanges(); // Force UI update
   }
 
   closeEditTerritoryModal() {
