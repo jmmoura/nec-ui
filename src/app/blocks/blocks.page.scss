@@ -44,3 +44,36 @@ th {
   background-color: #f4f4f4;
   font-weight: bold;
 }
+
+.fixed-width-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f4f4f4;
+  }
+
+  /* Fixed column widths */
+  .number-column {
+    width: 10%; /* Adjust as needed */
+  }
+
+  .visited-column {
+    width: 25%; /* Adjust as needed */
+  }
+
+  .date-column {
+    width: 35%; /* Adjust as needed */
+  }
+
+  .time-column {
+    width: 20%; /* Adjust as needed */
+  }
+}

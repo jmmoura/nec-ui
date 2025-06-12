@@ -18,11 +18,15 @@
           </ion-item>
           <ion-item>
             <ion-label><strong>Cartões designados:</strong></ion-label>
-            <ion-note slot="end">{{ assignedTerritories }} ({{ (assignedTerritories / totalTerritories) * 100 | number:'1.0-2' }}%)</ion-note>
+            <ion-note slot="end">
+              {{ assignedTerritories }} ({{ assignedPercentage }}%)
+            </ion-note>
           </ion-item>
           <ion-item>
             <ion-label><strong>Cartões livres:</strong></ion-label>
-            <ion-note slot="end">{{ unassignedTerritories }} ({{ (unassignedTerritories / totalTerritories) * 100 | number:'1.0-2' }}%)</ion-note>
+            <ion-note slot="end">
+              {{ unassignedTerritories }} ({{ unassignedPercentage }}%)
+            </ion-note>
           </ion-item>
         </ion-list>
       </ion-card-content>
@@ -34,7 +38,7 @@
       <ion-card-title>Territórios</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-grid>
+      <ion-grid class="territory-grid">
         <ion-row>
           <ion-col size="6" size-md="4" *ngFor="let territory of territories">
             <ion-card (click)="openEditTerritoryModal(territory)">

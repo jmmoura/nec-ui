@@ -48,19 +48,19 @@
             <ion-card-title>{{ street }}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <table>
+            <table class="fixed-width-table">
               <thead>
                 <tr>
-                  <th>N°</th>
-                  <th>Visitada?</th>
-                  <th>Data</th>
-                  <th>Turno</th>
+                  <th class="number-column">N°</th>
+                  <th class="visited-column">Visitada?</th>
+                  <th class="date-column">Data</th>
+                  <th class="time-column">Turno</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let house of getHousesByStreet(street)">
-                  <td>{{ house.number }}</td>
-                  <td>
+                  <td class="number-column">{{ house.number }}</td>
+                  <td class="visited-column">
                     <ion-checkbox
                       *ngIf="!house.readOnly"
                       [checked]="house.visited"
@@ -68,8 +68,8 @@
                     ></ion-checkbox>
                     <span *ngIf="house.readOnly">Não bater</span>
                   </td>
-                  <td>{{ house.visitDate || '' }}</td>
-                  <td>{{ house.visitTime || '' }}</td>
+                  <td class="date-column">{{ house.visitDate || '' }}</td>
+                  <td class="time-column">{{ house.visitTime || '' }}</td>
                 </tr>
               </tbody>
             </table>

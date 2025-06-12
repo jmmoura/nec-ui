@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonList, IonItem, IonLabel, IonNote } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [
     CommonModule,
-    HttpClientModule, // Add HttpClientModule here
+    HttpClientModule,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -42,7 +42,7 @@ export class TerritoryDetailsPage implements OnInit {
   noOneHomePercentage = 0;
   blocks: number[] = [];
 
-  constructor(private router: Router, private http: HttpClient) {} // Inject HttpClient
+  constructor(private router: Router, private http: HttpClient) {}
 
   ngOnInit() {
     const navigation = this.router.getCurrentNavigation();
@@ -50,24 +50,40 @@ export class TerritoryDetailsPage implements OnInit {
 
     console.log('State:', navigation?.extras.state);
 
-    // Fetch mock data from JSON file
-    this.http.get<any[]>('/assets/territories.json').subscribe((data) => {
-      const territory = data.find((t) => t.id === territoryId);
+    // Fetch territory data from territories.json
+    this.http.get<any[]>('/assets/territories.json').subscribe((territories) => {
+      const territory = territories.find((t) => t.id === territoryId);
       if (territory) {
         this.territory = territory;
         this.warningMessage = territory.warningMessage;
         this.assignedTo = territory.assignedTo;
         this.assignmentDate = territory.assignmentDate;
         this.daysSinceAssignment = this.calculateDaysSinceAssignment(territory.assignmentDate);
-        this.totalHouses = territory.totalHouses;
-        this.visitedHouses = territory.visitedHouses;
-        this.visitedPercentage = Math.round((territory.visitedHouses / territory.totalHouses) * 100);
-        this.noOneHomeHouses = territory.noOneHomeHouses;
-        this.noOneHomePercentage = Math.round((territory.noOneHomeHouses / territory.totalHouses) * 100);
 
-        // Generate blocks for the territory (example: 5 blocks)
-        this.blocks = Array.from({ length: 5 }, (_, i) => i + 1);
+        // Fetch block data from blocks.json
+        this.fetchBlockData(territory.id);
       }
+    });
+  }
+
+  fetchBlockData(territoryId: number) {
+    this.http.get<any[]>('/assets/blocks.json').subscribe((blocks) => {
+      const territoryBlocks = blocks.filter((block) => block.territoryId === territoryId);
+      console.log('Blocks for territory:', territoryBlocks);
+      // Calculate dashboard values based on blocks data
+      this.totalHouses = territoryBlocks.reduce((sum, block) => sum + block.houses.length, 0);
+      this.visitedHouses = territoryBlocks.reduce((sum, block) => sum + block.houses.filter((house: { visited: any; }) => house.visited ).length, 0);
+      this.noOneHomeHouses = this.totalHouses - this.visitedHouses;
+
+      this.visitedPercentage = this.totalHouses
+        ? Math.round((this.visitedHouses / this.totalHouses) * 100)
+        : 0;
+      this.noOneHomePercentage = this.totalHouses
+        ? Math.round((this.noOneHomeHouses / this.totalHouses) * 100)
+        : 0;
+
+      // Generate blocks for the territory
+      this.blocks = territoryBlocks.map((block) => block.blockNumber);
     });
   }
 

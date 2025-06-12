@@ -15,8 +15,13 @@
 
   <!-- Labels -->
   <div class="labels">
-    <p><strong>Designado para:</strong> {{ assignedTo || 'N/A' }}</p>
-    <p><strong>Data de designação:</strong> {{ assignmentDate || 'N/A' }} ({{ daysSinceAssignment }} dias)</p>
+    <p><strong>Designado para:</strong> {{ assignedTo || '' }}</p>
+    <p><strong>Data de designação:</strong> 
+      <span *ngIf="assignmentDate; else noDate">
+        {{ assignmentDate | date:'dd/MM/yyyy' }} ({{ daysSinceAssignment }} dias)
+      </span>
+      <ng-template #noDate></ng-template>
+    </p>
   </div>
 
   <!-- Dashboard -->

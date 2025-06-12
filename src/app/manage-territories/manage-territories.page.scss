@@ -10,9 +10,29 @@ ion-button {
   margin-right: 8px;
 }
 
-.text-center {
-  display: block;
+/* Styling for territory cards only */
+ion-grid.territory-grid ion-col ion-card {
+  width: 100%; /* Ensures the card takes up the full width of the column */
+  aspect-ratio: 1; /* Ensures the card is a square */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   text-align: center;
-  font-size: 1.2rem; /* Adjust font size as needed */
-  margin: 0 auto;
+}
+
+ion-grid.territory-grid ion-col ion-card-header {
+  flex: 0 0 auto; /* Prevents the header from stretching */
+}
+
+ion-grid.territory-grid ion-col ion-card-content {
+  flex: 1 1 auto; /* Allows the content to grow and fill the remaining space */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-center {
+  text-align: center;
 }

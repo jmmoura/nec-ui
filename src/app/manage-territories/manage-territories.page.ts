@@ -43,6 +43,8 @@ export class ManageTerritoriesPage implements OnInit {
   totalTerritories = 0;
   assignedTerritories = 0;
   unassignedTerritories = 0;
+  assignedPercentage = 0;
+  unassignedPercentage = 0;
 
   isAddTerritoryModalOpen = false;
   newTerritory = { name: '', number: '' };
@@ -67,6 +69,14 @@ export class ManageTerritoriesPage implements OnInit {
     this.totalTerritories = this.territories.length;
     this.assignedTerritories = this.territories.filter((t) => t.assignedTo).length;
     this.unassignedTerritories = this.totalTerritories - this.assignedTerritories;
+
+    // Calculate percentages and round them to integers
+    this.assignedPercentage = this.totalTerritories
+      ? Math.round((this.assignedTerritories / this.totalTerritories) * 100)
+      : 0;
+    this.unassignedPercentage = this.totalTerritories
+      ? Math.round((this.unassignedTerritories / this.totalTerritories) * 100)
+      : 0;
   }
 
   openAddTerritoryModal() {

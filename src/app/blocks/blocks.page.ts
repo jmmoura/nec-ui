@@ -42,6 +42,7 @@ export class BlocksPage implements OnInit {
     const navigation = this.router.getCurrentNavigation();
     this.territory = navigation?.extras.state?.territory;
     this.block = navigation?.extras.state?.block;
+    console.log('State:', navigation?.extras.state);
 
     if (!this.territory || !this.block) {
       console.error('Territory or block data is missing!');
@@ -53,8 +54,8 @@ export class BlocksPage implements OnInit {
 
   loadBlockData() {
     this.http.get<any>('assets/blocks.json').subscribe(
-      data => {
-        const blockData = data.blocks.find(
+      blocks => {
+        const blockData = blocks.find(
           (b: any) => b.territoryId === this.territory.id && b.blockNumber === this.block
         );
         if (blockData) {
@@ -70,27 +71,30 @@ export class BlocksPage implements OnInit {
   }
 
   getTotalHouses(): number {
-    return this.houses?.length || 0;
+    // Exclude houses marked as "Não bater"
+    return this.houses?.filter(h => !h.readOnly).length || 0;
   }
 
   getVisitedHouses(): number {
-    return this.houses?.filter(h => h.visited).length || 0;
+    // Exclude houses marked as "Não bater"
+    return this.houses?.filter(h => h.visited && !h.readOnly).length || 0;
   }
 
   getVisitedPercentage(): number {
     const total = this.getTotalHouses();
     const visited = this.getVisitedHouses();
-    return total ? (visited / total) * 100 : 0;
+    return total ? Math.round((visited / total) * 100) : 0;
   }
 
   getNoOneHomeHouses(): number {
+    // Exclude houses marked as "Não bater"
     return this.houses?.filter(h => !h.visited && !h.readOnly).length || 0;
   }
 
   getNoOneHomePercentage(): number {
     const total = this.getTotalHouses();
     const noOneHome = this.getNoOneHomeHouses();
-    return total ? (noOneHome / total) * 100 : 0;
+    return total ? Math.round((noOneHome / total) * 100) : 0;
   }
 
   getUniqueStreets(): string[] {
