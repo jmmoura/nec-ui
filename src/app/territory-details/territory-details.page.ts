@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonList, IonItem, IonLabel, IonNote } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonList, IonItem, IonLabel, IonNote, IonModal } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 
 @Component({
@@ -27,6 +27,7 @@ import { Router } from '@angular/router';
     IonItem,
     IonLabel,
     IonNote,
+    IonModal
   ],
 })
 export class TerritoryDetailsPage implements OnInit {
@@ -41,6 +42,7 @@ export class TerritoryDetailsPage implements OnInit {
   noOneHomeHouses = 0;
   noOneHomePercentage = 0;
   blocks: number[] = [];
+  isMapModalOpen = false;
 
   constructor(private router: Router, private http: HttpClient) {}
 
@@ -97,5 +99,13 @@ export class TerritoryDetailsPage implements OnInit {
   selectBlock(block: number) {
     console.log('Selected block:', block);
     this.router.navigate(['/blocks'], { state: { territory: this.territory, block } });
+  }
+
+  openMapModal() {
+    this.isMapModalOpen = true;
+  }
+
+  closeMapModal() {
+    this.isMapModalOpen = false;
   }
 }

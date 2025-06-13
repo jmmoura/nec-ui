@@ -8,6 +8,11 @@
 </ion-header>
 
 <ion-content>
+  <!-- Territory Map Image -->
+  <div class="territory-image" *ngIf="territory?.mapPath" (click)="openMapModal()">
+    <img [src]="territory.mapPath" alt="Mapa do Território {{ territory?.name }}" />
+  </div>
+
   <!-- Warning Messages -->
   <div *ngIf="warningMessage" class="warning-message">
     {{ warningMessage }}
@@ -59,4 +64,23 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <!-- Map Modal -->
+  <ion-modal [isOpen]="isMapModalOpen" (ionModalDidDismiss)="closeMapModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeMapModal()">Fechar</ion-button>
+          </ion-buttons>
+          <ion-title>Mapa do Território</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <div class="modal-map">
+          <img [src]="territory?.mapPath" alt="Mapa do Território {{ territory?.name }}" />
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

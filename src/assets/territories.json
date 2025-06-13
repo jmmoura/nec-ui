@@ -8,7 +8,8 @@
     "totalHouses": 100,
     "visitedHouses": 60,
     "noOneHomeHouses": 20,
-    "warningMessage": "This territory has pending updates."
+    "warningMessage": "This territory has pending updates.",
+    "mapPath": "/assets/maps/1.jpeg"
   },
   {
     "id": 2,
@@ -19,7 +20,8 @@
     "totalHouses": 80,
     "visitedHouses": 50,
     "noOneHomeHouses": 10,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/2.jpeg"
   },
   {
     "id": 3,
@@ -30,7 +32,8 @@
     "totalHouses": 120,
     "visitedHouses": 70,
     "noOneHomeHouses": 30,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/3.jpeg"
   },
   {
     "id": 4,
@@ -41,7 +44,8 @@
     "totalHouses": 90,
     "visitedHouses": 40,
     "noOneHomeHouses": 20,
-    "warningMessage": "Check for updates."
+    "warningMessage": "Check for updates.",
+    "mapPath": "/assets/maps/4.jpeg"
   },
   {
     "id": 5,
@@ -52,7 +56,8 @@
     "totalHouses": 110,
     "visitedHouses": 80,
     "noOneHomeHouses": 15,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/5.jpeg"
   },
   {
     "id": 6,
@@ -63,7 +68,8 @@
     "totalHouses": 95,
     "visitedHouses": 60,
     "noOneHomeHouses": 25,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/6.jpeg"
   },
   {
     "id": 7,
@@ -74,7 +80,8 @@
     "totalHouses": 85,
     "visitedHouses": 50,
     "noOneHomeHouses": 20,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/7.jpeg"
   },
   {
     "id": 8,
@@ -85,7 +92,8 @@
     "totalHouses": 100,
     "visitedHouses": 70,
     "noOneHomeHouses": 10,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/8.jpeg"
   },
   {
     "id": 9,
@@ -96,7 +104,8 @@
     "totalHouses": 75,
     "visitedHouses": 40,
     "noOneHomeHouses": 15,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/9.jpeg"
   },
   {
     "id": 10,
@@ -107,7 +116,8 @@
     "totalHouses": 130,
     "visitedHouses": 90,
     "noOneHomeHouses": 20,
-    "warningMessage": "Pending review."
+    "warningMessage": "Pending review.",
+    "mapPath": "/assets/maps/10.jpeg"
   },
   {
     "id": 11,
@@ -118,7 +128,8 @@
     "totalHouses": 90,
     "visitedHouses": 60,
     "noOneHomeHouses": 15,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/11.jpeg"
   },
   {
     "id": 12,
@@ -129,7 +140,8 @@
     "totalHouses": 100,
     "visitedHouses": 80,
     "noOneHomeHouses": 10,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/12.jpeg"
   },
   {
     "id": 13,
@@ -140,7 +152,8 @@
     "totalHouses": 110,
     "visitedHouses": 90,
     "noOneHomeHouses": 5,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/13.jpeg"
   },
   {
     "id": 14,
@@ -151,7 +164,8 @@
     "totalHouses": 95,
     "visitedHouses": 70,
     "noOneHomeHouses": 20,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/14.jpeg"
   },
   {
     "id": 15,
@@ -162,7 +176,8 @@
     "totalHouses": 85,
     "visitedHouses": 60,
     "noOneHomeHouses": 15,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/15.jpeg"
   },
   {
     "id": 16,
@@ -173,7 +188,8 @@
     "totalHouses": 100,
     "visitedHouses": 80,
     "noOneHomeHouses": 10,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/16.jpeg"
   },
   {
     "id": 17,
@@ -184,7 +200,8 @@
     "totalHouses": 75,
     "visitedHouses": 50,
     "noOneHomeHouses": 15,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/17.jpeg"
   },
   {
     "id": 18,
@@ -195,7 +212,8 @@
     "totalHouses": 130,
     "visitedHouses": 100,
     "noOneHomeHouses": 20,
-    "warningMessage": "Pending review."
+    "warningMessage": "Pending review.",
+    "mapPath": "/assets/maps/18.jpeg"
   },
   {
     "id": 19,
@@ -206,7 +224,8 @@
     "totalHouses": 90,
     "visitedHouses": 70,
     "noOneHomeHouses": 10,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/19.jpeg"
   },
   {
     "id": 20,
@@ -217,7 +236,8 @@
     "totalHouses": 100,
     "visitedHouses": 90,
     "noOneHomeHouses": 5,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/20.jpeg"
   },
   {
     "id": 21,
@@ -228,7 +248,8 @@
     "totalHouses": 110,
     "visitedHouses": 100,
     "noOneHomeHouses": 5,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/21.jpeg"
   },
   {
     "id": 22,
@@ -239,7 +260,8 @@
     "totalHouses": 95,
     "visitedHouses": 80,
     "noOneHomeHouses": 10,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/22.jpeg"
   },
   {
     "id": 23,
@@ -250,7 +272,8 @@
     "totalHouses": 85,
     "visitedHouses": 70,
     "noOneHomeHouses": 10,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/23.jpeg"
   },
   {
     "id": 24,
@@ -261,7 +284,8 @@
     "totalHouses": 100,
     "visitedHouses": 90,
     "noOneHomeHouses": 5,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/24.jpeg"
   },
   {
     "id": 25,
@@ -272,7 +296,8 @@
     "totalHouses": 75,
     "visitedHouses": 60,
     "noOneHomeHouses": 10,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/25.jpeg"
   },
   {
     "id": 26,
@@ -283,7 +308,8 @@
     "totalHouses": 130,
     "visitedHouses": 110,
     "noOneHomeHouses": 15,
-    "warningMessage": "Pending review."
+    "warningMessage": "Pending review.",
+    "mapPath": "/assets/maps/26.jpeg"
   },
   {
     "id": 27,
@@ -294,6 +320,7 @@
     "totalHouses": 90,
     "visitedHouses": 80,
     "noOneHomeHouses": 5,
-    "warningMessage": null
+    "warningMessage": null,
+    "mapPath": "/assets/maps/27.jpeg"
   }
 ]
