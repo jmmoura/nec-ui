@@ -118,6 +118,7 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
 
   closeMapModal() {
     this.isMapModalOpen = false;
+    this.listenersAdded = false; // Reset the flag to reinitialize listeners when the modal is reopened
   }
 
   ngAfterViewChecked() {
@@ -137,7 +138,7 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
       mapImage.addEventListener('touchmove', (event) => this.onTouchMove(event));
       mapImage.addEventListener('touchend', () => this.onTouchEnd());
 
-      this.listenersAdded = true; // Ensure listeners are added only once
+      this.listenersAdded = true; // Ensure listeners are added only once per modal open
     }
   }
 
