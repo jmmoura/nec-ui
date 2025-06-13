@@ -52,6 +52,7 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
   private startY = 0;
   private panX = 0;
   private panY = 0;
+  private initialDistance = 0;
   private listenersAdded = false;
 
   constructor(private router: Router, private http: HttpClient) {}
@@ -131,6 +132,11 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
       mapImage.addEventListener('mouseup', () => this.onMouseUp());
       mapImage.addEventListener('mouseleave', () => this.onMouseUp());
 
+      // Add touch event listeners for mobile devices
+      mapImage.addEventListener('touchstart', (event) => this.onTouchStart(event));
+      mapImage.addEventListener('touchmove', (event) => this.onTouchMove(event));
+      mapImage.addEventListener('touchend', () => this.onTouchEnd());
+
       this.listenersAdded = true; // Ensure listeners are added only once
     }
   }
@@ -157,6 +163,48 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
 
   onMouseUp() {
     this.mapImage.nativeElement.style.cursor = 'grab';
+  }
+
+  onTouchStart(event: TouchEvent) {
+    if (event.touches.length === 1) {
+      // Single touch for panning
+      const touch = event.touches[0];
+      this.startX = touch.clientX - this.panX;
+      this.startY = touch.clientY - this.panY;
+    } else if (event.touches.length === 2) {
+      // Two fingers for zooming
+      this.initialDistance = this.getDistance(event.touches);
+    }
+  }
+
+  onTouchMove(event: TouchEvent) {
+    event.preventDefault();
+    if (event.touches.length === 1) {
+      // Single touch for panning
+      const touch = event.touches[0];
+      this.panX = touch.clientX - this.startX;
+      this.panY = touch.clientY - this.startY;
+      this.updateTransform();
+    } else if (event.touches.length === 2) {
+      // Two fingers for zooming
+      const currentDistance = this.getDistance(event.touches);
+      const scaleChange = currentDistance / this.initialDistance;
+      this.scale = Math.min(Math.max(this.scale * scaleChange, 1), 3); // Limit zoom between 1x and 3x
+      this.initialDistance = currentDistance;
+      this.updateTransform();
+    }
+  }
+
+  onTouchEnd() {
+    // Reset initial distance when touch ends
+    this.initialDistance = 0;
+  }
+
+  getDistance(touches: TouchList): number {
+    const [touch1, touch2] = [touches[0], touches[1]];
+    const dx = touch2.clientX - touch1.clientX;
+    const dy = touch2.clientY - touch1.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
   }
 
   updateTransform() {
