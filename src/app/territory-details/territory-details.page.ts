@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonList, IonItem, IonLabel, IonNote, IonModal } from '@ionic/angular/standalone';
@@ -30,7 +30,10 @@ import { Router } from '@angular/router';
     IonModal
   ],
 })
-export class TerritoryDetailsPage implements OnInit {
+export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
+  @ViewChild('mapImage', { static: false }) mapImage!: ElementRef<HTMLImageElement>;
+  @ViewChild('mapContainer', { static: false }) mapContainer!: ElementRef<HTMLDivElement>;
+
   territory: any;
   warningMessage: string | null = null;
   assignedTo: string | null = null;
@@ -43,6 +46,13 @@ export class TerritoryDetailsPage implements OnInit {
   noOneHomePercentage = 0;
   blocks: number[] = [];
   isMapModalOpen = false;
+
+  private scale = 1;
+  private startX = 0;
+  private startY = 0;
+  private panX = 0;
+  private panY = 0;
+  private listenersAdded = false;
 
   constructor(private router: Router, private http: HttpClient) {}
 
@@ -107,5 +117,50 @@ export class TerritoryDetailsPage implements OnInit {
 
   closeMapModal() {
     this.isMapModalOpen = false;
+  }
+
+  ngAfterViewChecked() {
+    if (this.isMapModalOpen && !this.listenersAdded && this.mapImage && this.mapContainer) {
+      const mapImage = this.mapImage.nativeElement;
+      const mapContainer = this.mapContainer.nativeElement;
+
+      // Add event listeners for zooming and panning
+      mapContainer.addEventListener('wheel', (event) => this.onWheel(event));
+      mapImage.addEventListener('mousedown', (event) => this.onMouseDown(event));
+      mapImage.addEventListener('mousemove', (event) => this.onMouseMove(event));
+      mapImage.addEventListener('mouseup', () => this.onMouseUp());
+      mapImage.addEventListener('mouseleave', () => this.onMouseUp());
+
+      this.listenersAdded = true; // Ensure listeners are added only once
+    }
+  }
+
+  onWheel(event: WheelEvent) {
+    event.preventDefault();
+    const delta = event.deltaY > 0 ? -0.1 : 0.1;
+    this.scale = Math.min(Math.max(this.scale + delta, 1), 3); // Limit zoom between 1x and 3x
+    this.updateTransform();
+  }
+
+  onMouseDown(event: MouseEvent) {
+    this.startX = event.clientX - this.panX;
+    this.startY = event.clientY - this.panY;
+    this.mapImage.nativeElement.style.cursor = 'grabbing';
+  }
+
+  onMouseMove(event: MouseEvent) {
+    if (event.buttons !== 1) return; // Only pan when the left mouse button is pressed
+    this.panX = event.clientX - this.startX;
+    this.panY = event.clientY - this.startY;
+    this.updateTransform();
+  }
+
+  onMouseUp() {
+    this.mapImage.nativeElement.style.cursor = 'grab';
+  }
+
+  updateTransform() {
+    const transform = `scale(${this.scale}) translate(${this.panX / this.scale}px, ${this.panY / this.scale}px)`;
+    this.mapImage.nativeElement.style.transform = transform;
   }
 }

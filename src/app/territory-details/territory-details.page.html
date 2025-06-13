@@ -77,8 +77,13 @@
         </ion-toolbar>
       </ion-header>
       <ion-content>
-        <div class="modal-map">
-          <img [src]="territory?.mapPath" alt="Mapa do Território {{ territory?.name }}" />
+        <div class="modal-map" #mapContainer>
+          <img
+            [src]="territory?.mapPath"
+            alt="Mapa do Território {{ territory?.name }}"
+            class="zoomable-map"
+            #mapImage
+          />
         </div>
       </ion-content>
     </ng-template>
