@@ -45,13 +45,15 @@
               <ion-card-header>
                 <ion-card-title>
                   <ion-text class="text-center">
-                    <strong>{{ territory.number }}</strong>
+                    <strong>{{ territory.territoryNumber }}</strong>
                   </ion-text>
                 </ion-card-title>
               </ion-card-header>
               <ion-card-content class="text-center">
-                <p><strong>{{ territory.assignedTo || '' }}</strong></p>
+                <p><strong>{{ territory.assignedToPersonName || '' }}</strong></p>
                 <p><strong>{{ territory.assignmentDate | date:'dd/MM/yyyy' || '' }}</strong></p>
+                <!-- Display complete date -->
+                <p><strong>{{ territory.completedDate | date:'dd/MM/yyyy' || '' }}</strong></p>
               </ion-card-content>
             </ion-card>
           </ion-col>
@@ -77,47 +79,54 @@
           <ion-item>
             <ion-label position="stacked">Nome do Território</ion-label>
             <ion-input
-              [(ngModel)]="selectedTerritory.name"
-              name="name"
+              [(ngModel)]="selectedTerritory.territoryName"
+              name="territoryName"
               required
-              #name="ngModel"
+              #territoryName="ngModel"
             ></ion-input>
           </ion-item>
-          <ion-note *ngIf="name.invalid && name.touched" color="danger">
+          <ion-note *ngIf="territoryName.invalid && territoryName.touched" color="danger">
             Nome do Território é obrigatório.
           </ion-note>
 
           <ion-item>
             <ion-label position="stacked">Número do Território</ion-label>
             <ion-input
-              [(ngModel)]="selectedTerritory.number"
-              name="number"
+              [(ngModel)]="selectedTerritory.territoryNumber"
+              name="territoryNumber"
               required
-              type="number"
-              #number="ngModel"
+              type="territoryNumber"
+              #territoryNumber="ngModel"
             ></ion-input>
           </ion-item>
-          <ion-note *ngIf="number.invalid && number.touched" color="danger">
+          <ion-note *ngIf="territoryNumber.invalid && territoryNumber.touched" color="danger">
             Número do Território é obrigatório.
           </ion-note>
 
+          <!-- Designado para: replaced with select -->
           <ion-item>
             <ion-label position="stacked">Designado para</ion-label>
-            <ion-input
-              [(ngModel)]="selectedTerritory.assignedTo"
-              name="assignedTo"
-              #assignedTo="ngModel"
-            ></ion-input>
+            <ion-select
+              [(ngModel)]="selectedTerritory.assignedToPersonId"
+              name="assignedToPersonId"
+              (ionChange)="onAssignedPersonChange($event)"
+              interface="popover"
+              placeholder="Selecione uma pessoa"
+            >
+              <ion-select-option *ngFor="let person of personList" [value]="person.id">
+                {{ person.name }}
+              </ion-select-option>
+            </ion-select>
           </ion-item>
 
           <ion-item>
-            <ion-label position="stacked">Data de Designação</ion-label>
+            <ion-label position="stacked">Data da Designação</ion-label>
             <ion-input
               [ngModel]="selectedTerritory.assignmentDate"
               (ngModelChange)="selectedTerritory.assignmentDate = $event"
               name="assignmentDate"
               type="date"
-              [required]="selectedTerritory.assignedTo?.trim() !== ''"
+              [required]="selectedTerritory.assignedToPersonId != null && selectedTerritory.assignedToPersonId !== ''"
               #assignmentDate="ngModel"
             ></ion-input>
           </ion-item>
@@ -128,11 +137,23 @@
             Data de Designação é obrigatória se "Designado para" estiver preenchido.
           </ion-note>
 
+          <!-- complete Date (Data da Conclusão) - made optional -->
+          <ion-item>
+            <ion-label position="stacked">Data da Conclusão</ion-label>
+            <ion-input
+              [ngModel]="selectedTerritory.completedDate"
+              (ngModelChange)="selectedTerritory.completedDate = $event"
+              name="completedDate"
+              type="date"
+              #completedDate="ngModel"
+            ></ion-input>
+          </ion-item>
+
           <ion-item>
             <ion-label position="stacked">Mensagem de Aviso</ion-label>
             <ion-textarea
-              [(ngModel)]="selectedTerritory.warningMessage"
-              name="warningMessage"
+              [(ngModel)]="selectedTerritory.territoryWarningMessage"
+              name="territoryWarningMessage"
             ></ion-textarea>
           </ion-item>
 

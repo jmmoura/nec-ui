@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Import CommonModule
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonButtons, IonBackButton } from '@ionic/angular/standalone';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { TerritorySummary } from '../model/TerritorySummary';
+import { TerritoryService } from '../service/territory/territory.service';
 
 @Component({
   selector: 'app-note-no-one-home',
@@ -11,7 +12,6 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [
     CommonModule, // Add CommonModule to imports
-    HttpClientModule,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -27,16 +27,19 @@ import { Router } from '@angular/router';
   ],
 })
 export class NoteNoOneHomePage implements OnInit {
-  territories: any[] = [];
+  territories: TerritorySummary[] = [];
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private router: Router,
+    private territorySvc: TerritoryService
+  ) {}
 
   ngOnInit() {
     this.loadTerritories();
   }
 
   loadTerritories() {
-    this.http.get<any[]>('assets/territories.json').subscribe({
+    this.territorySvc.getAllTerritories().subscribe({
       next: (data) => {
         this.territories = data;
       },
@@ -46,7 +49,7 @@ export class NoteNoOneHomePage implements OnInit {
     });
   }
 
-  selectTerritory(territory: any) {
+  selectTerritory(territory: TerritorySummary) {
     console.log('Selected territory:', territory);
     this.router.navigate(['/territory-details'], { state: { territory } });
   }

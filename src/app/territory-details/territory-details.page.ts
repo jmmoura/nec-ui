@@ -1,17 +1,41 @@
-import { Component, ElementRef, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonList, IonItem, IonLabel, IonNote, IonModal } from '@ionic/angular/standalone';
-import { Router } from '@angular/router';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  AfterViewChecked,
+} from "@angular/core";
+import { CommonModule } from "@angular/common";
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonButtons,
+  IonBackButton,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonCard,
+  IonCardContent,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonNote,
+  IonModal,
+} from "@ionic/angular/standalone";
+import { Router } from "@angular/router";
+import { TerritoryDetails } from "../model/TerritoryDetails";
+import { TerritoryService } from "../service/territory/territory.service";
+import { BlockSummary } from "../model/BlockSummary";
 
 @Component({
-  selector: 'app-territory-details',
-  templateUrl: './territory-details.page.html',
-  styleUrls: ['./territory-details.page.scss'],
+  selector: "app-territory-details",
+  templateUrl: "./territory-details.page.html",
+  styleUrls: ["./territory-details.page.scss"],
   standalone: true,
   imports: [
     CommonModule,
-    HttpClientModule,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -27,14 +51,16 @@ import { Router } from '@angular/router';
     IonItem,
     IonLabel,
     IonNote,
-    IonModal
+    IonModal,
   ],
 })
 export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
-  @ViewChild('mapImage', { static: false }) mapImage!: ElementRef<HTMLImageElement>;
-  @ViewChild('mapContainer', { static: false }) mapContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild("mapImage", { static: false })
+  mapImage!: ElementRef<HTMLImageElement>;
+  @ViewChild("mapContainer", { static: false })
+  mapContainer!: ElementRef<HTMLDivElement>;
 
-  territory: any;
+  territory: TerritoryDetails | null = null;
   warningMessage: string | null = null;
   assignedTo: string | null = null;
   assignmentDate: string | null = null;
@@ -44,7 +70,7 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
   visitedPercentage = 0;
   noOneHomeHouses = 0;
   noOneHomePercentage = 0;
-  blocks: number[] = [];
+  blocks: BlockSummary[] = [];
   isMapModalOpen = false;
 
   private scale = 1;
@@ -55,37 +81,41 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
   private initialDistance = 0;
   private listenersAdded = false;
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(
+    private router: Router,
+    private territorySvc: TerritoryService,
+  ) {}
 
   ngOnInit() {
     const navigation = this.router.getCurrentNavigation();
     const territoryId = navigation?.extras.state?.territory.id;
 
-    console.log('State:', navigation?.extras.state);
+    console.log("State:", navigation?.extras.state);
 
-    // Fetch territory data from territories.json
-    this.http.get<any[]>('/assets/territories.json').subscribe((territories) => {
-      const territory = territories.find((t) => t.id === territoryId);
-      if (territory) {
-        this.territory = territory;
-        this.warningMessage = territory.warningMessage;
-        this.assignedTo = territory.assignedTo;
-        this.assignmentDate = territory.assignmentDate;
-        this.daysSinceAssignment = this.calculateDaysSinceAssignment(territory.assignmentDate);
+    this.territorySvc.getTerritory(territoryId).subscribe((territory) => {
+      this.territory = territory;
+      this.territory.territoryMapPath = `/assets/maps/${territory.territoryNumber}.jpeg`
+      this.warningMessage = territory.territoryWarningMessage || null;
+      this.assignedTo = territory.assignedTo || null;
+      this.assignmentDate = territory.assignmentDate || null;
+      this.daysSinceAssignment = territory.assignmentDate
+        ? this.calculateDaysSinceAssignment(territory.assignmentDate)
+        : null;
 
-        // Fetch block data from blocks.json
-        this.fetchBlockData(territory.id);
-      }
+      this.fetchBlockData();
     });
   }
 
-  fetchBlockData(territoryId: number) {
-    this.http.get<any[]>('/assets/blocks.json').subscribe((blocks) => {
-      const territoryBlocks = blocks.filter((block) => block.territoryId === territoryId);
-      console.log('Blocks for territory:', territoryBlocks);
-      // Calculate dashboard values based on blocks data
-      this.totalHouses = territoryBlocks.reduce((sum, block) => sum + block.houses.length, 0);
-      this.visitedHouses = territoryBlocks.reduce((sum, block) => sum + block.houses.filter((house: { visited: any; }) => house.visited ).length, 0);
+  ionViewWillEnter() {
+      this.fetchBlockData();
+  }
+
+  fetchBlockData() {
+    
+      console.log("Blocks for territory:", this.territory?.blocks);
+
+      this.totalHouses = this.territory?.territoryTotalHouses || 0;
+      this.visitedHouses = this.territory?.territoryVisitedHouses || 0;
       this.noOneHomeHouses = this.totalHouses - this.visitedHouses;
 
       this.visitedPercentage = this.totalHouses
@@ -95,21 +125,25 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
         ? Math.round((this.noOneHomeHouses / this.totalHouses) * 100)
         : 0;
 
-      // Generate blocks for the territory
-      this.blocks = territoryBlocks.map((block) => block.blockNumber);
-    });
+      this.blocks = this.territory?.blocks || [];
   }
 
   calculateDaysSinceAssignment(date: string): number {
-    const assignmentDate = new Date(date.split('/').reverse().join('-'));
+    const parts = date.split("-");
+    const assignmentDate = new Date(+parts[0], +parts[1] - 1, +parts[2]);
     const today = new Date();
-    const diffTime = Math.abs(today.getTime() - assignmentDate.getTime());
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffTime = today.getTime() - assignmentDate.getTime();
+    if (diffTime < 0) {
+      return 0; // Assignment date is in the future
+    }
+    return Math.floor(diffTime / (1000 * 60 * 60 * 24));
   }
 
-  selectBlock(block: number) {
-    console.log('Selected block:', block);
-    this.router.navigate(['/blocks'], { state: { territory: this.territory, block } });
+  selectBlock(block: BlockSummary) {
+    console.log("Selected block:", block);
+    this.router.navigate(["/blocks"], {
+      state: { territory: this.territory, block },
+    });
   }
 
   openMapModal() {
@@ -122,21 +156,34 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked() {
-    if (this.isMapModalOpen && !this.listenersAdded && this.mapImage && this.mapContainer) {
+    if (
+      this.isMapModalOpen &&
+      !this.listenersAdded &&
+      this.mapImage &&
+      this.mapContainer
+    ) {
       const mapImage = this.mapImage.nativeElement;
       const mapContainer = this.mapContainer.nativeElement;
 
       // Add event listeners for zooming and panning
-      mapContainer.addEventListener('wheel', (event) => this.onWheel(event));
-      mapImage.addEventListener('mousedown', (event) => this.onMouseDown(event));
-      mapImage.addEventListener('mousemove', (event) => this.onMouseMove(event));
-      mapImage.addEventListener('mouseup', () => this.onMouseUp());
-      mapImage.addEventListener('mouseleave', () => this.onMouseUp());
+      mapContainer.addEventListener("wheel", (event) => this.onWheel(event));
+      mapImage.addEventListener("mousedown", (event) =>
+        this.onMouseDown(event)
+      );
+      mapImage.addEventListener("mousemove", (event) =>
+        this.onMouseMove(event)
+      );
+      mapImage.addEventListener("mouseup", () => this.onMouseUp());
+      mapImage.addEventListener("mouseleave", () => this.onMouseUp());
 
       // Add touch event listeners for mobile devices
-      mapImage.addEventListener('touchstart', (event) => this.onTouchStart(event));
-      mapImage.addEventListener('touchmove', (event) => this.onTouchMove(event));
-      mapImage.addEventListener('touchend', () => this.onTouchEnd());
+      mapImage.addEventListener("touchstart", (event) =>
+        this.onTouchStart(event)
+      );
+      mapImage.addEventListener("touchmove", (event) =>
+        this.onTouchMove(event)
+      );
+      mapImage.addEventListener("touchend", () => this.onTouchEnd());
 
       this.listenersAdded = true; // Ensure listeners are added only once per modal open
     }
@@ -152,7 +199,7 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
   onMouseDown(event: MouseEvent) {
     this.startX = event.clientX - this.panX;
     this.startY = event.clientY - this.panY;
-    this.mapImage.nativeElement.style.cursor = 'grabbing';
+    this.mapImage.nativeElement.style.cursor = "grabbing";
   }
 
   onMouseMove(event: MouseEvent) {
@@ -163,7 +210,7 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
   }
 
   onMouseUp() {
-    this.mapImage.nativeElement.style.cursor = 'grab';
+    this.mapImage.nativeElement.style.cursor = "grab";
   }
 
   onTouchStart(event: TouchEvent) {
@@ -209,7 +256,9 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
   }
 
   updateTransform() {
-    const transform = `scale(${this.scale}) translate(${this.panX / this.scale}px, ${this.panY / this.scale}px)`;
+    const transform = `scale(${this.scale}) translate(${
+      this.panX / this.scale
+    }px, ${this.panY / this.scale}px)`;
     this.mapImage.nativeElement.style.transform = transform;
   }
 }

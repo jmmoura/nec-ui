@@ -3,14 +3,14 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/territory-details"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ territory?.name }} - {{ territory?.number }} / Quadra {{ block }}</ion-title>
+    <ion-title>{{ territory?.territoryName }} - {{ territory?.territoryNumber }} / Quadra {{ block?.name }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <!-- Warning Message -->
-  <div *ngIf="territory?.warningMessage" class="warning-message">
-    {{ territory.warningMessage }}
+  <div *ngIf="territory?.territoryWarningMessage" class="warning-message">
+    {{ territory.territoryWarningMessage }}
   </div>
 
   <!-- Dashboard -->
@@ -66,9 +66,9 @@
                       [checked]="house.visited"
                       (ionChange)="markVisited(house, $event)"
                     ></ion-checkbox>
-                    <span *ngIf="house.readOnly">Não bater</span>
+                    <span *ngIf="house.visitUnallowed">Não bater</span>
                   </td>
-                  <td class="date-column">{{ house.visitDate || '' }}</td>
+                  <td class="date-column">{{ house.visitedAt | date:'dd/MM/yyyy' || '' }}</td>
                   <td class="time-column">{{ house.visitTime || '' }}</td>
                 </tr>
               </tbody>

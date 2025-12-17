@@ -3,14 +3,14 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/note-no-one-home"></ion-back-button>
     </ion-buttons>
-    <ion-title>Território {{ territory?.name }} - {{ territory?.number }}</ion-title>
+    <ion-title>Território {{ territory?.territoryName }} - {{ territory?.territoryNumber }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <!-- Territory Map Image -->
-  <div class="territory-image" *ngIf="territory?.mapPath" (click)="openMapModal()">
-    <img [src]="territory.mapPath" alt="Mapa do Território {{ territory?.name }}" />
+  <div class="territory-image" *ngIf="territory?.territoryMapPath" (click)="openMapModal()">
+    <img [src]="territory.territoryMapPath" alt="Mapa do Território {{ territory?.territoryName }}" />
   </div>
 
   <!-- Warning Messages -->
@@ -23,7 +23,7 @@
     <p><strong>Designado para:</strong> {{ assignedTo || '' }}</p>
     <p><strong>Data de designação:</strong> 
       <span *ngIf="assignmentDate; else noDate">
-        {{ assignmentDate | date:'dd/MM/yyyy' }} ({{ daysSinceAssignment }} dias)
+        {{ assignmentDate | date:'dd/MM/yyyy' }} - {{ daysSinceAssignment }} dia(s)
       </span>
       <ng-template #noDate></ng-template>
     </p>
@@ -58,7 +58,7 @@
       <ion-col size="4" *ngFor="let block of blocks">
         <ion-card (click)="selectBlock(block)" class="square-card">
           <ion-card-content>
-            <div class="block-text">{{ block }}</div>
+            <div class="block-text">{{ block.name }}</div>
           </ion-card-content>
         </ion-card>
       </ion-col>
