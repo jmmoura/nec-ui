@@ -106,9 +106,9 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
     });
   }
 
-  ionViewWillEnter() {
-      this.fetchBlockData();
-  }
+  // ionViewWillEnter() {
+  //     this.fetchBlockData();
+  // }
 
   fetchBlockData() {
     

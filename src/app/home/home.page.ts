@@ -23,4 +23,8 @@ export class HomePage {
   navigateToManageTerritories() {
     this.router.navigate(['/manage-territories']);
   }
+
+  navigateToManagePeople() {
+    this.router.navigate(['/manage-persons']);
+  }
 }

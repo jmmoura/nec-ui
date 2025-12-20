@@ -26,7 +26,11 @@ export const routes: Routes = [
     path: 'blocks',
     loadComponent: () => import('./blocks/blocks.page').then((m) => m.BlocksPage),
   },
-  { path: 'manage-territories',
-    loadComponent: () => import('./manage-territories/manage-territories.page').then((m) => m.ManageTerritoriesPage)
+  { path: 'manage-persons',
+    loadComponent: () => import('./manage-persons/manage-persons.page').then((m) => m.ManagePersonsPage)
+  },
+  {
+    path: 'manage-persons',
+    loadComponent: () => import('./manage-persons/manage-persons.page').then( m => m.ManagePersonsPage)
   },
 ];
