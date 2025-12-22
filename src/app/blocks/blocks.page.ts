@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonCheckbox, IonList, IonItem, IonLabel, IonNote } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonCheckbox, IonList, IonItem, IonLabel, IonNote, IonSpinner } from '@ionic/angular/standalone';
 import { BlockDetails } from '../model/BlockDetails';
 import { TerritoryDetails } from '../model/TerritoryDetails';
 import { Address } from '../model/Address';
@@ -31,9 +31,11 @@ import { AddressService } from '../service/address/address.service';
     IonItem,
     IonLabel,
     IonNote,
+    IonSpinner,
   ],
 })
 export class BlocksPage implements OnInit {
+  loading = false;
   territory: TerritoryDetails | null = null;
   block: BlockDetails | null = null;
   addressList: Address[] = [];
@@ -55,6 +57,7 @@ export class BlocksPage implements OnInit {
   }
 
   loadBlockData(blockId: number) {
+    this.loading = true;
     this.blockSvc.getBlock(blockId).subscribe({
       next: (blockDetails) => {
         this.block = blockDetails;
@@ -68,9 +71,11 @@ export class BlocksPage implements OnInit {
           address.visitTime = address.visitedAt ? this.getTimeOfDay(address.visitedAt) : null;
           address.visited = !!address.visitedAt;
         });          
+        this.loading = false;
       },
       error: (err) => {
         console.error('Error fetching block details:', err);
+        this.loading = false;
       }
     });
   }

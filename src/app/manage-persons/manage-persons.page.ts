@@ -15,6 +15,7 @@ import {
   IonInput,
   IonButton,
   IonIcon,
+  IonSpinner,
   IonGrid,
   IonRow,
   IonCol,
@@ -44,6 +45,7 @@ import { pencil, add, trash } from 'ionicons/icons';
     IonInput,
     IonButton,
     IonIcon,
+    IonSpinner,
     IonGrid,
     IonRow,
     IonCol,
@@ -53,6 +55,7 @@ import { pencil, add, trash } from 'ionicons/icons';
 export class ManagePersonsPage implements OnInit, OnDestroy {
   persons: Person[] = [];
   sub: Subscription | undefined;
+  loading = false;
 
   // Form model: only name
   form: Partial<Person> = {};
@@ -76,11 +79,16 @@ export class ManagePersonsPage implements OnInit, OnDestroy {
 
   private loadPersons() {
     this.sub?.unsubscribe();
-    this.sub = this.personService.getAllPersons().subscribe(list => {
-      this.persons = list;
-      if (this.isEditing && this.form?.id && !list.find(p => p.id === this.form.id)) {
-        this.resetForm();
-      }
+    this.loading = true;
+    this.sub = this.personService.getAllPersons().subscribe({
+      next: list => {
+        this.persons = list;
+        if (this.isEditing && this.form?.id && !list.find(p => p.id === this.form.id)) {
+          this.resetForm();
+        }
+        this.loading = false;
+      },
+      error: () => { this.loading = false; }
     });
   }
 

@@ -8,62 +8,70 @@
 </ion-header>
 
 <ion-content>
-  <!-- Territory Map Image -->
-  <div class="territory-image" *ngIf="territory?.territoryMapPath" (click)="openMapModal()">
-    <img [src]="territory.territoryMapPath" alt="Mapa do Território {{ territory?.territoryName }}" />
-  </div>
+  <ng-container *ngIf="!loading; else loadingTpl">
+    <!-- Territory Map Image -->
+    <div class="territory-image" *ngIf="territory?.territoryMapPath" (click)="openMapModal()">
+      <img [src]="territory.territoryMapPath" alt="Mapa do Território {{ territory?.territoryName }}" />
+    </div>
 
-  <!-- Warning Messages -->
-  <div *ngIf="warningMessage" class="warning-message">
-    {{ warningMessage }}
-  </div>
+    <!-- Warning Messages -->
+    <div *ngIf="warningMessage" class="warning-message">
+      {{ warningMessage }}
+    </div>
 
-  <!-- Labels -->
-  <div class="labels">
-    <p><strong>Designado para:</strong> {{ assignedTo || '' }}</p>
-    <p><strong>Data de designação:</strong> 
-      <span *ngIf="assignmentDate; else noDate">
-        {{ assignmentDate | date:'dd/MM/yyyy' }} - {{ daysSinceAssignment }} dia(s)
-      </span>
-      <ng-template #noDate></ng-template>
-    </p>
-  </div>
+    <!-- Labels -->
+    <div class="labels">
+      <p><strong>Designado para:</strong> {{ assignedTo || '' }}</p>
+      <p><strong>Data de designação:</strong> 
+        <span *ngIf="assignmentDate; else noDate">
+          {{ assignmentDate | date:'dd/MM/yyyy' }} - {{ daysSinceAssignment }} dia(s)
+        </span>
+        <ng-template #noDate></ng-template>
+      </p>
+    </div>
 
-  <!-- Dashboard -->
-  <div class="dashboard">
-    <ion-card>
-      <ion-card-content>
-        <ion-list>
-          <ion-item>
-            <ion-label><strong>Casas do território:</strong></ion-label>
-            <ion-note slot="end">{{ totalHouses }}</ion-note>
-          </ion-item>
-          <ion-item>
-            <ion-label><strong>Casas faladas:</strong></ion-label>
-            <ion-note slot="end">{{ visitedHouses }} ({{ visitedPercentage }}%)</ion-note>
-          </ion-item>
-          <ion-item>
-            <ion-label><strong>Não em casa:</strong></ion-label>
-            <ion-note slot="end">{{ noOneHomeHouses }} ({{ noOneHomePercentage }}%)</ion-note>
-          </ion-item>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
-  </div>
+    <!-- Dashboard -->
+    <div class="dashboard">
+      <ion-card>
+        <ion-card-content>
+          <ion-list>
+            <ion-item>
+              <ion-label><strong>Casas do território:</strong></ion-label>
+              <ion-note slot="end">{{ totalHouses }}</ion-note>
+            </ion-item>
+            <ion-item>
+              <ion-label><strong>Casas faladas:</strong></ion-label>
+              <ion-note slot="end">{{ visitedHouses }} ({{ visitedPercentage }}%)</ion-note>
+            </ion-item>
+            <ion-item>
+              <ion-label><strong>Não em casa:</strong></ion-label>
+              <ion-note slot="end">{{ noOneHomeHouses }} ({{ noOneHomePercentage }}%)</ion-note>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </div>
 
-  <!-- Block Grid -->
-  <h2 style="text-align: center; margin-top: 16px;">Selecione uma quadra</h2>
-  <ion-grid>
-    <ion-row>
-      <ion-col size="4" *ngFor="let block of blocks">
-        <ion-card (click)="selectBlock(block)" class="square-card">
-          <ion-card-content>
-            <div class="block-text">{{ block.name }}</div>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+    <!-- Block Grid -->
+    <h2 style="text-align: center; margin-top: 16px;">Selecione uma quadra</h2>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4" *ngFor="let block of blocks">
+          <ion-card (click)="selectBlock(block)" class="square-card">
+            <ion-card-content>
+              <div class="block-text">{{ block.name }}</div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
+
+  <ng-template #loadingTpl>
+    <div class="spinner-wrap">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  </ng-template>
 
   <!-- Map Modal -->
   <ion-modal [isOpen]="isMapModalOpen" (ionModalDidDismiss)="closeMapModal()">

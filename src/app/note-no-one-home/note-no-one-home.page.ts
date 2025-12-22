@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Import CommonModule
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonButtons, IonBackButton } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonButtons, IonBackButton, IonSpinner } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { TerritorySummary } from '../model/TerritorySummary';
 import { TerritoryService } from '../service/territory/territory.service';
@@ -28,6 +28,7 @@ import { TerritoryService } from '../service/territory/territory.service';
 })
 export class NoteNoOneHomePage implements OnInit {
   territories: TerritorySummary[] = [];
+  loading = false;
 
   constructor(
     private router: Router,
@@ -39,12 +40,15 @@ export class NoteNoOneHomePage implements OnInit {
   }
 
   loadTerritories() {
+    this.loading = true;
     this.territorySvc.getAllTerritories().subscribe({
       next: (data) => {
         this.territories = data;
+        this.loading = false;
       },
       error: (err) => {
         console.error('Error loading territories:', err);
+        this.loading = false;
       },
     });
   }

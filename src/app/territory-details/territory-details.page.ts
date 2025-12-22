@@ -23,6 +23,7 @@ import {
   IonLabel,
   IonNote,
   IonModal,
+  IonSpinner,
 } from "@ionic/angular/standalone";
 import { Router } from "@angular/router";
 import { TerritoryDetails } from "../model/TerritoryDetails";
@@ -52,9 +53,11 @@ import { BlockSummary } from "../model/BlockSummary";
     IonLabel,
     IonNote,
     IonModal,
+    IonSpinner,
   ],
 })
 export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
+  loading = false;
   @ViewChild("mapImage", { static: false })
   mapImage!: ElementRef<HTMLImageElement>;
   @ViewChild("mapContainer", { static: false })
@@ -92,17 +95,25 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
 
     console.log("State:", navigation?.extras.state);
 
-    this.territorySvc.getTerritory(territoryId).subscribe((territory) => {
-      this.territory = territory;
-      this.territory.territoryMapPath = `/assets/maps/${territory.territoryNumber}.jpeg`
-      this.warningMessage = territory.territoryWarningMessage || null;
-      this.assignedTo = territory.assignedTo || null;
-      this.assignmentDate = territory.assignmentDate || null;
-      this.daysSinceAssignment = territory.assignmentDate
-        ? this.calculateDaysSinceAssignment(territory.assignmentDate)
-        : null;
+    this.loading = true;
+    this.territorySvc.getTerritory(territoryId).subscribe({
+      next: (territory) => {
+        this.loading = false;
+        this.territory = territory;
+        this.territory.territoryMapPath = `/assets/maps/${territory.territoryNumber}.jpeg`;
+        this.warningMessage = territory.territoryWarningMessage || null;
+        this.assignedTo = territory.assignedTo || null;
+        this.assignmentDate = territory.assignmentDate || null;
+        this.daysSinceAssignment = territory.assignmentDate
+          ? this.calculateDaysSinceAssignment(territory.assignmentDate)
+          : null;
 
-      this.fetchBlockData();
+        this.fetchBlockData();
+      },
+      error: (err) => {
+        this.loading = false;
+        console.error('Error loading territory:', err);
+      }
     });
   }
 

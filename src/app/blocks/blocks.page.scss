@@ -24,6 +24,7 @@
   font-weight: bold;
   color: var(--ion-text-color, #000);
 }
+.spinner-wrap { display: flex; align-items: center; justify-content: center; padding: 32px 0; }
 
 .dashboard {
   margin: 16px;
