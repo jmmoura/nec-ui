@@ -114,7 +114,28 @@ export class BlocksPage implements OnInit {
       if (event.detail.checked) {
         // Mark as visited
         house.visited = true;
-        house.visitedAt = new Date().toISOString();
+        const date = new Date();
+        // Create a formatter for the America/Sao_Paulo timezone in ISO format
+        const formatter = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'America/Sao_Paulo',
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false
+        });
+
+        const parts = formatter.formatToParts(date);
+        const year = parts.find(p => p.type === 'year')?.value;
+        const month = parts.find(p => p.type === 'month')?.value;
+        const day = parts.find(p => p.type === 'day')?.value;
+        const hour = parts.find(p => p.type === 'hour')?.value;
+        const minute = parts.find(p => p.type === 'minute')?.value;
+        const second = parts.find(p => p.type === 'second')?.value;
+
+        house.visitedAt = `${year}-${month}-${day}T${hour}:${minute}:${second}`;
         house.visitTime = this.getTimeOfDay(house.visitedAt);
       } else {
         // Clear date and time when unchecked
