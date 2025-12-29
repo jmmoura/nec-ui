@@ -20,3 +20,4 @@ config.json
 config/
 resources/
 resources/*
+www/
