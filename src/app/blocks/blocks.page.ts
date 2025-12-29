@@ -19,8 +19,8 @@ import {
   IonLabel,
   IonNote,
   IonSpinner,
+  ToastController
 } from "@ionic/angular/standalone";
-import { ToastController } from "@ionic/angular";
 import { BlockDetails } from "../model/BlockDetails";
 import { TerritoryDetails } from "../model/TerritoryDetails";
 import { Address } from "../model/Address";

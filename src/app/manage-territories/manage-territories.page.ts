@@ -28,6 +28,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonText,
+  ToastController
 } from "@ionic/angular/standalone";
 
 import { TerritoryAssignment } from "../model/TerritoryAssignment";
@@ -39,7 +40,6 @@ import { Role } from "../model/Role";
 import { LinkRequest } from "../model/LinkRequest";
 import { AuthService } from "../service/authentication/auth.service";
 import { DateOrderDirective } from "../shared/validators/date-order.directive";
-import { ToastController } from "@ionic/angular";
 
 @Component({
   selector: "app-manage-territories",

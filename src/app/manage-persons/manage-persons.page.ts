@@ -18,8 +18,8 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  ToastController,
 } from "@ionic/angular/standalone";
-import { ToastController } from "@ionic/angular";
 import { PersonService } from "../service/person/person.service";
 import { Person } from "src/app/model/Person";
 import { pencil, add, trash } from "ionicons/icons";
