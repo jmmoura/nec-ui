@@ -87,6 +87,7 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
   linkCopied = false;
   showLinkAvailable = false;
   currentUserRole: string | null = null;
+  isGeneratingLink = false;
 
   private scale = 1;
   private startX = 0;
@@ -180,12 +181,15 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
   generateLinkForTerritory() {
     if (!this.territory) return;
     const linkRequest: LinkRequest = { territoryNumber: this.territory.territoryNumber, role: Role.PUBLISHER };
+    this.isGeneratingLink = true;
     this.linkGenerator.generateTerritoryLink(linkRequest).subscribe({
       next: (link) => {
         this.generatedLink = link;
         this.linkCopied = false;
+        this.isGeneratingLink = false;
       },
       error: (err) => {
+        this.isGeneratingLink = false;
         console.error("Failed to get territory link", err);
         if (err.status === 401 || err.status === 403) {
           this.authService.logout();

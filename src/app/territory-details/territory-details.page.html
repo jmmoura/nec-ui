@@ -30,7 +30,10 @@
       </p>
       <!-- Generate link button shown only when assignment date exists -->
       <div *ngIf="showLinkAvailable" class="link-actions">
-        <ion-button size="small" color="tertiary" (click)="generateLinkForTerritory()">Gerar link</ion-button>
+        <ion-button size="small" color="tertiary" (click)="generateLinkForTerritory()" [disabled]="isGeneratingLink">
+          <ion-spinner *ngIf="isGeneratingLink" slot="start" name="crescent"></ion-spinner>
+          {{ isGeneratingLink ? 'Gerando...' : 'Gerar link' }}
+        </ion-button>
       </div>
       <div *ngIf="generatedLink" class="generated-link">
         <ion-item>

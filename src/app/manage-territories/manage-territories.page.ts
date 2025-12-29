@@ -28,6 +28,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonText,
+  IonSpinner,
 } from "@ionic/angular/standalone";
 
 import { TerritoryAssignment } from "../model/TerritoryAssignment";
@@ -94,6 +95,8 @@ export class ManageTerritoriesPage implements OnInit {
   linkCopied = false;
   // Show link controls only when assignmentDate is present
   showLinkAvailable = false;
+  // indicate generation in progress
+  isGeneratingLink = false;
 
   constructor(
     private assignmentSvc: AssignmentService,
@@ -234,12 +237,15 @@ export class ManageTerritoriesPage implements OnInit {
   generateLinkForSelectedTerritory() {
     if (!this.selectedTerritory) return;
     const linkRequest: LinkRequest = { territoryNumber: this.selectedTerritory.territoryNumber, role: Role.CONDUCTOR };
+    this.isGeneratingLink = true;
     this.linkGeneratorSvc.generateTerritoryLink(linkRequest).subscribe({
       next: link => {
         this.generatedLink = link;
         this.linkCopied = false;
+        this.isGeneratingLink = false;
       },
       error: (err: any) => {
+        this.isGeneratingLink = false;
         console.error("Failed to get territory link", err);
         if (err.status === 401 || err.status === 403) {
           this.authService.logout();

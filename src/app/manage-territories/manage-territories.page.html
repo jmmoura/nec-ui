@@ -160,8 +160,9 @@
 
           <!-- Link generation: available only when assignmentDate is present -->
           <div class="link-section" *ngIf="showLinkAvailable">
-            <ion-button expand="block" color="tertiary" (click)="generateLinkForSelectedTerritory()">
-              Gerar link
+            <ion-button expand="block" color="tertiary" (click)="generateLinkForSelectedTerritory()" [disabled]="isGeneratingLink">
+              <ion-spinner *ngIf="isGeneratingLink" slot="start" name="crescent"></ion-spinner>
+              {{ isGeneratingLink ? 'Gerando...' : 'Gerar link' }}
             </ion-button>
 
             <div *ngIf="generatedLink" class="generated-link">
