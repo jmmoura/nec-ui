@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { AuthService } from '../service/authentication/auth.service';
+import { logOutOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +16,12 @@ import { Router } from '@angular/router';
   ],
 })
 export class HomePage {
-  constructor(private router: Router) {}
+  readonly logOutIcon = logOutOutline;
+  constructor(private router: Router, private authService: AuthService) {}
+
+  logout() {
+    this.authService.logout();
+  }
 
   navigateToNoteNoOneHome() {
     this.router.navigate(['/note-no-one-home']);

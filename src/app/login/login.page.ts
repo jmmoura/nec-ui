@@ -16,6 +16,7 @@ import {
   IonCardTitle,
   IonCardContent
 } from "@ionic/angular/standalone";
+import { LoadingController } from '@ionic/angular';
 import { AuthService } from "../service/authentication/auth.service";
 import { Authentication } from "../model/Authentication";
 import { SharedLink } from "../model/SharedLink";
@@ -46,20 +47,29 @@ export class LoginPage implements OnInit {
   model = { username: "", password: "" };
   error = "";
 
-  constructor(private authService: AuthService, private router: Router, private activatedRoute: ActivatedRoute) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private loadingCtrl: LoadingController,
+  ) {}
 
   ngOnInit() {
-    this.activatedRoute.queryParams.subscribe(params => {
+    this.activatedRoute.queryParams.subscribe(async params => {
       if (params['sharedLink']) {
+        const loading = await this.loadingCtrl.create({ message: 'Aguarde. Entrando no app.' });
+        await loading.present();
         const authRequest: SharedLink = { access: params['sharedLink'] };
         this.authService.loginWithToken(authRequest).subscribe({
-          next: (authResult) => {
+          next: async (authResult) => {
+            await loading.dismiss();
             if (authResult) {
               this.setSession(authResult);
               this.router.navigate(['territory-details']);
             }
           },
-          error: (err) => {
+          error: async (err) => {
+            await loading.dismiss();
             if (err.status === 401 || err.status === 403) {
               this.authService.logout();
               this.error = "Acesso inválido ou expirado";
@@ -72,14 +82,17 @@ export class LoginPage implements OnInit {
     });
     }
 
-  submit(form?: any) {
+  async submit(form?: any) {
     if (form?.invalid) {
       form.control.markAllAsTouched();
       return;
     }
     this.error = "";
+    const loading = await this.loadingCtrl.create({ message: 'Aguarde. Entrando no app.' });
+    await loading.present();
     this.authService.login(this.model.username, this.model.password).subscribe({
-      next: (authResult) => {
+      next: async (authResult) => {
+        await loading.dismiss();
         if (!authResult) {
           this.error = "Credenciais inválidas";
           return;
@@ -87,7 +100,8 @@ export class LoginPage implements OnInit {
         this.setSession(authResult);
         this.router.navigateByUrl("/home");
       },
-      error: () => {
+      error: async () => {
+        await loading.dismiss();
         this.error = "Erro de rede";
       }
     });
