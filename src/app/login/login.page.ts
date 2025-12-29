@@ -14,9 +14,9 @@ import {
   IonCard,
   IonCardHeader,
   IonCardTitle,
-  IonCardContent
+  IonCardContent,
+  LoadingController,
 } from "@ionic/angular/standalone";
-import { LoadingController } from '@ionic/angular';
 import { AuthService } from "../service/authentication/auth.service";
 import { Authentication } from "../model/Authentication";
 import { SharedLink } from "../model/SharedLink";
@@ -40,59 +40,61 @@ import { SharedLink } from "../model/SharedLink";
     IonCardTitle,
     IonCardContent,
     CommonModule,
-    FormsModule
+    FormsModule,
   ],
 })
 export class LoginPage implements OnInit {
   model = { username: "", password: "" };
   error = "";
+  loading: any;
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    // private loadingCtrl: LoadingController,
+    private loadingCtrl: LoadingController
   ) {}
 
   ngOnInit() {
-    this.activatedRoute.queryParams.subscribe(async params => {
-      if (params['sharedLink']) {
-        // const loading = await this.loadingCtrl.create({ message: 'Aguarde. Entrando no app.' });
-        // await loading.present();
-        const authRequest: SharedLink = { access: params['sharedLink'] };
+    this.activatedRoute.queryParams.subscribe((params) => {
+      if (params["sharedLink"]) {
+        this.showLoading();
+
+        const authRequest: SharedLink = { access: params["sharedLink"] };
         this.authService.loginWithToken(authRequest).subscribe({
-          next: async (authResult) => {
-            // await loading.dismiss();
+          next: (authResult) => {
             if (authResult) {
               this.setSession(authResult);
-              this.router.navigate(['territory-details']);
+              this.loading.dismiss();
+              this.router.navigate(["territory-details"]);
             }
           },
-          error: async (err) => {
-            // await loading.dismiss();
+          error: (err) => {
             if (err.status === 401 || err.status === 403) {
               this.authService.logout();
               this.error = "Acesso inválido ou expirado";
               return;
             }
+            this.loading.dismiss();
             this.error = "Erro de rede";
-          }
+          },
         });
       }
     });
-    }
+  }
 
-  async submit(form?: any) {
+  submit(form?: any) {
     if (form?.invalid) {
       form.control.markAllAsTouched();
       return;
     }
+
+    this.showLoading();
+
     this.error = "";
-    // const loading = await this.loadingCtrl.create({ message: 'Aguarde. Entrando no app.' });
-    // await loading.present();
     this.authService.login(this.model.username, this.model.password).subscribe({
-      next: async (authResult) => {
-        // await loading.dismiss();
+      next: (authResult) => {
+        this.loading.dismiss();
         if (!authResult) {
           this.error = "Credenciais inválidas";
           return;
@@ -100,15 +102,26 @@ export class LoginPage implements OnInit {
         this.setSession(authResult);
         this.router.navigateByUrl("/home");
       },
-      error: async () => {
-        // await loading.dismiss();
+      error: () => {
+        this.loading.dismiss();
         this.error = "Erro de rede";
-      }
+      },
     });
   }
 
+  async showLoading() {
+    this.loading = await this.loadingCtrl.create({
+      message: "Aguarde. Entrando no app.",
+    });
+
+    this.loading.present();
+  }
+
   private setSession(authResult: Authentication) {
-    localStorage.setItem('accessToken', authResult.tokenType + ' ' + authResult.accessToken);
-    localStorage.setItem('user', JSON.stringify(authResult.user));
+    localStorage.setItem(
+      "accessToken",
+      authResult.tokenType + " " + authResult.accessToken
+    );
+    localStorage.setItem("user", JSON.stringify(authResult.user));
   }
 }
