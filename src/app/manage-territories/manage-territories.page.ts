@@ -34,6 +34,10 @@ import { TerritoryAssignment } from "../model/TerritoryAssignment";
 import { AssignmentService } from "../service/assignment/assignment.service";
 import { Person } from 'src/app/model/Person';
 import { PersonService } from 'src/app/service/person/person.service';
+import { LinkGeneratorService } from 'src/app/service/link-generator/link-generator.service';
+import { Role } from "../model/Role";
+import { LinkRequest } from "../model/LinkRequest";
+import { AuthService } from "../service/authentication/auth.service";
 
 @Component({
   selector: "app-manage-territories",
@@ -85,9 +89,17 @@ export class ManageTerritoriesPage implements OnInit {
 
   personList: Person[] = [];
 
+  // generated link shown in modal and flag to prevent multiple copies
+  generatedLink: string | null = null;
+  linkCopied = false;
+  // Show link controls only when assignmentDate is present
+  showLinkAvailable = false;
+
   constructor(
     private assignmentSvc: AssignmentService,
     private personSvc: PersonService,
+    private linkGeneratorSvc: LinkGeneratorService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit() {
@@ -101,7 +113,12 @@ export class ManageTerritoriesPage implements OnInit {
         this.territories = data;
         this.calculateStatistics();
       },
-      error: (err: any) => console.error("Failed to load territories", err),
+      error: (err: any) => {
+        console.error("Failed to load territories", err);
+        if (err.status === 401 || err.status === 403) {
+          this.authService.logout();
+        }
+      },
     });
   }
 
@@ -176,26 +193,90 @@ export class ManageTerritoriesPage implements OnInit {
       ...territory
     };
     this.isEditTerritoryModalOpen = true;
+    this.generatedLink = null;
+    this.linkCopied = false;
+    this.showLinkAvailable = !!this.selectedTerritory?.assignmentDate;
   }
 
   closeEditTerritoryModal() {
     this.isEditTerritoryModalOpen = false;
     this.selectedTerritory = null;
+    this.generatedLink = null;
+    this.linkCopied = false;
+    this.showLinkAvailable = false;
   }
 
   saveTerritory() {
     console.log("Saving territory:", this.selectedTerritory);
     this.assignmentSvc.updateAssignment(this.selectedTerritory!).subscribe({
       next: (updatedTerritory: TerritoryAssignment) => {
+        // Refresh list and keep modal open; update selected territory and link availability
         this.loadTerritories();
-        this.closeEditTerritoryModal();
+        this.selectedTerritory = { ...updatedTerritory };
+        this.showLinkAvailable = !!updatedTerritory.assignmentDate;
+        this.generatedLink = null;
+        this.linkCopied = false;
       },
-      error: (err: any) => console.error("Failed to update territory", err),
+      error: (err: any) => {
+        console.error("Failed to update territory", err);
+        if (err.status === 401 || err.status === 403) {
+          this.authService.logout();
+        }
+      },
     });    
   }
 
   deleteTerritory(territory: any) {
     this.territories = this.territories.filter((t) => t !== territory);
     this.calculateStatistics();
+  }
+
+  generateLinkForSelectedTerritory() {
+    if (!this.selectedTerritory) return;
+    const linkRequest: LinkRequest = { territoryNumber: this.selectedTerritory.territoryNumber, role: Role.CONDUCTOR };
+    this.linkGeneratorSvc.generateTerritoryLink(linkRequest).subscribe({
+      next: link => {
+        this.generatedLink = link;
+        this.linkCopied = false;
+      },
+      error: (err: any) => {
+        console.error("Failed to get territory link", err);
+        if (err.status === 401 || err.status === 403) {
+          this.authService.logout();
+        }
+      },
+    });
+  }
+
+  async copyGeneratedLink() {
+    if (!this.generatedLink || this.linkCopied) return;
+    const text = this.generatedLink;
+    try {
+      if (navigator && typeof navigator.clipboard !== 'undefined') {
+        await navigator.clipboard.writeText(text);
+      } else {
+        this.fallbackCopyTextToClipboard(text);
+      }
+      this.linkCopied = true;
+    } catch (e) {
+      // fallback attempt
+      this.fallbackCopyTextToClipboard(text);
+      this.linkCopied = true;
+    }
+  }
+
+  private fallbackCopyTextToClipboard(text: string) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand('copy');
+    } catch (err) {
+      console.error('Fallback: Oops, unable to copy', err);
+    }
+    document.body.removeChild(textarea);
   }
 }

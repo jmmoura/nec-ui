@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { Subscription } from "rxjs";
 import {
   IonContent,
   IonHeader,
@@ -19,16 +19,18 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonToast
-} from '@ionic/angular/standalone';
-import { PersonService } from '../service/person/person.service';
-import { Person } from 'src/app/model/Person';
-import { pencil, add, trash } from 'ionicons/icons';
+  IonToast,
+} from "@ionic/angular/standalone";
+import { PersonService } from "../service/person/person.service";
+import { Person } from "src/app/model/Person";
+import { pencil, add, trash } from "ionicons/icons";
+import { AuthService } from "../service/authentication/auth.service";
+import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-manage-persons',
-  templateUrl: './manage-persons.page.html',
-  styleUrls: ['./manage-persons.page.scss'],
+  selector: "app-manage-persons",
+  templateUrl: "./manage-persons.page.html",
+  styleUrls: ["./manage-persons.page.scss"],
   standalone: true,
   imports: [
     IonContent,
@@ -50,45 +52,51 @@ import { pencil, add, trash } from 'ionicons/icons';
     IonRow,
     IonCol,
     IonToast,
-  ]
+  ],
 })
-export class ManagePersonsPage implements OnInit, OnDestroy {
+export class ManagePersonsPage implements OnInit {
   persons: Person[] = [];
-  sub: Subscription | undefined;
   loading = false;
 
   // Form model: only name
   form: Partial<Person> = {};
   isEditing = false;
-  toastMessage = '';
+  toastMessage = "";
 
   // expose icons to the template
   readonly pencil = pencil;
   readonly add = add;
   readonly trash = trash;
 
-  constructor(private personService: PersonService) { }
+  constructor(
+    private personService: PersonService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.loadPersons();
   }
 
-  ngOnDestroy() {
-    this.sub?.unsubscribe();
-  }
-
   private loadPersons() {
-    this.sub?.unsubscribe();
     this.loading = true;
-    this.sub = this.personService.getAllPersons().subscribe({
-      next: list => {
+    this.personService.getAllPersons().subscribe({
+      next: (list) => {
         this.persons = list;
-        if (this.isEditing && this.form?.id && !list.find(p => p.id === this.form.id)) {
+        if (
+          this.isEditing &&
+          this.form?.id &&
+          !list.find((p) => p.id === this.form.id)
+        ) {
           this.resetForm();
         }
         this.loading = false;
       },
-      error: () => { this.loading = false; }
+      error: (err) => {
+        this.loading = false;
+        if (err.status === 401 || err.status === 403) {
+          this.authService.logout();
+        }
+      },
     });
   }
 
@@ -103,41 +111,53 @@ export class ManagePersonsPage implements OnInit, OnDestroy {
   }
 
   save() {
-    const name = (this.form.name || '').trim();
+    const name = (this.form.name || "").trim();
     if (!name) {
-      this.showToast('Nome é obrigatório.');
+      this.showToast("Nome é obrigatório.");
       return;
     }
-    const existing = this.persons.find(p => p.name?.toLowerCase() === name.toLowerCase());
+    const existing = this.persons.find(
+      (p) => p.name?.toLowerCase() === name.toLowerCase()
+    );
 
     if (!this.isEditing) {
       if (existing) {
-        this.showToast('Já existe uma pessoa com esse nome.');
+        this.showToast("Já existe uma pessoa com esse nome.");
         return;
       }
-      this.personService.add({ name }).subscribe(res => {
-        if (res) {
-          this.showToast('Pessoa adicionada.');
+      this.personService.add({ name }).subscribe({
+        next: () => {
+          this.showToast("Pessoa adicionada.");
           this.resetForm();
           this.loadPersons();
-        } else {
-          this.showToast('Falha ao adicionar pessoa.');
-        }
+        },
+        error: (err) => {
+          console.error("Failed to add person", err);
+          this.showToast("Falha ao adicionar pessoa.");
+          if (err.status === 401 || err.status === 403) {
+            this.authService.logout();
+          }
+        },
       });
     } else {
       if (existing && existing.id !== this.form.id) {
-        this.showToast('Já existe outra pessoa com esse nome.');
+        this.showToast("Já existe outra pessoa com esse nome.");
         return;
       }
       const updated: Person = { id: this.form.id as number, name };
-      this.personService.update(updated).subscribe(res => {
-        if (res) {
-          this.showToast('Pessoa atualizada.');
+      this.personService.update(updated).subscribe({
+        next: () => {
+          this.showToast("Pessoa atualizada.");
           this.resetForm();
           this.isEditing = false;
           this.loadPersons();
-        } else {
-          this.showToast('Falha ao atualizar pessoa.');
+        },
+        error: (err) => {
+          console.error("Failed to update person", err);
+          this.showToast("Falha ao atualizar pessoa.");
+          if (err.status === 401 || err.status === 403) {
+            this.authService.logout();
+          }
         }
       });
     }
@@ -146,15 +166,20 @@ export class ManagePersonsPage implements OnInit, OnDestroy {
   deletePerson(p: Person) {
     const ok = window.confirm(`Remover "${p.name}"?`);
     if (!ok) return;
-    this.personService.remove(p.id as number).subscribe(success => {
-      if (success) {
-        this.showToast('Pessoa removida.');
+    this.personService.remove(p.id as number).subscribe({
+      next: () => {
+        this.showToast("Pessoa removida.");
         if (this.isEditing && this.form?.id === p.id) {
           this.resetForm();
         }
         this.loadPersons();
-      } else {
-        this.showToast('Falha ao remover pessoa.');
+      },
+      error: (err) => {
+        console.error("Failed to remove person", err);
+        this.showToast("Falha ao remover pessoa.");
+        if (err.status === 401 || err.status === 403) {
+          this.authService.logout();
+        }
       }
     });
   }
@@ -166,6 +191,6 @@ export class ManagePersonsPage implements OnInit, OnDestroy {
 
   private showToast(msg: string) {
     this.toastMessage = msg;
-    setTimeout(() => this.toastMessage = '', 2500);
+    setTimeout(() => (this.toastMessage = ""), 2500);
   }
 }

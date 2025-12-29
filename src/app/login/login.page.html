@@ -1,0 +1,42 @@
+<ion-header [translucent]="true">
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">login</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div class="login-center">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Entrar</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <form #loginForm="ngForm" (ngSubmit)="submit(loginForm)">
+          <ion-item>
+            <ion-label position="stacked">Usuário</ion-label>
+            <ion-input [(ngModel)]="model.username" name="username" required minlength="3" #username="ngModel"></ion-input>
+          </ion-item>
+          <ion-note color="danger" *ngIf="username.invalid && username.touched">
+            <span *ngIf="username.errors?.required">Usuário é obrigatório.</span>
+            <span *ngIf="username.errors?.minlength">Mínimo 3 caracteres.</span>
+          </ion-note>
+
+          <ion-item>
+            <ion-label position="stacked">Senha</ion-label>
+            <ion-input type="password" [(ngModel)]="model.password" name="password" required minlength="6" #password="ngModel"></ion-input>
+          </ion-item>
+          <ion-note color="danger" *ngIf="password.invalid && password.touched">
+            <span *ngIf="password.errors?.required">Senha é obrigatória.</span>
+            <span *ngIf="password.errors?.minlength">Mínimo 6 caracteres.</span>
+          </ion-note>
+
+          <div class="actions">
+            <ion-button expand="block" type="submit" [disabled]="loginForm.invalid">Entrar</ion-button>
+          </div>
+        </form>
+        <p class="error" *ngIf="error">{{ error }}</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

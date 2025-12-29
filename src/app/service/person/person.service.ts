@@ -13,30 +13,20 @@ export class PersonService {
 
   constructor(private http: HttpClient) { }
 
-  // Fetch all persons (id, name)
   getAllPersons(): Observable<Person[]> {
-    return this.http.get<Person[]>(this.apiUrl).pipe(
-      catchError(() => of([]))
-    );
+    return this.http.get<Person[]>(this.apiUrl);
   }
 
-  add(person: Omit<Person, 'id'>): Observable<Person | null> {
-    return this.http.post<Person>(this.apiUrl, person).pipe(
-      catchError(() => of(null))
-    );
+  add(person: Omit<Person, 'id'>): Observable<Person> {
+    return this.http.post<Person>(this.apiUrl, person);
   }
 
-  update(person: Person): Observable<Person | null> {
-    return this.http.put<Person>(`${this.apiUrl}/${person.id}`, person).pipe(
-      catchError(() => of(null))
-    );
+  update(person: Person): Observable<Person> {
+    return this.http.put<Person>(`${this.apiUrl}/${person.id}`, person);
   }
 
-  remove(id: number): Observable<boolean> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
-      map(() => true),
-      catchError(() => of(false))
-    );
+  remove(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
   
 }

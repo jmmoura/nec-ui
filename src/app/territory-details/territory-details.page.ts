@@ -23,12 +23,18 @@ import {
   IonLabel,
   IonNote,
   IonModal,
+  IonTextarea,
   IonSpinner,
 } from "@ionic/angular/standalone";
-import { Router } from "@angular/router";
+import { Navigation, Router } from "@angular/router";
 import { TerritoryDetails } from "../model/TerritoryDetails";
 import { TerritoryService } from "../service/territory/territory.service";
 import { BlockSummary } from "../model/BlockSummary";
+import { User } from "../model/User";
+import { AuthService } from "../service/authentication/auth.service";
+import { LinkGeneratorService } from '../service/link-generator/link-generator.service';
+import { LinkRequest } from '../model/LinkRequest';
+import { Role } from '../model/Role';
 
 @Component({
   selector: "app-territory-details",
@@ -54,6 +60,7 @@ import { BlockSummary } from "../model/BlockSummary";
     IonNote,
     IonModal,
     IonSpinner,
+    IonTextarea,
   ],
 })
 export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
@@ -75,6 +82,11 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
   noOneHomePercentage = 0;
   blocks: BlockSummary[] = [];
   isMapModalOpen = false;
+  user: User | null = null;
+  generatedLink: string | null = null;
+  linkCopied = false;
+  showLinkAvailable = false;
+  currentUserRole: string | null = null;
 
   private scale = 1;
   private startX = 0;
@@ -83,17 +95,40 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
   private panY = 0;
   private initialDistance = 0;
   private listenersAdded = false;
+  private navigation: Navigation | null = null;
 
   constructor(
     private router: Router,
     private territorySvc: TerritoryService,
+    private authService: AuthService,
+    private linkGenerator: LinkGeneratorService,
   ) {}
 
   ngOnInit() {
-    const navigation = this.router.getCurrentNavigation();
-    const territoryId = navigation?.extras.state?.territory.id;
+    this.navigation = this.router.getCurrentNavigation();
 
-    console.log("State:", navigation?.extras.state);
+  }
+
+  canGenerateLink(): boolean {
+    return this.currentUserRole === Role.CONDUCTOR || this.currentUserRole === Role.ADMIN;
+  }
+
+  ionViewWillEnter() {
+    this.fetchBlockData();
+  }
+
+  fetchBlockData() {
+    // const navigation = this.router.getCurrentNavigation();
+
+    this.user = JSON.parse(localStorage.getItem('user') || 'null');
+
+    let territoryId = this.navigation?.extras.state?.territory.id;
+
+    if (!territoryId) {
+      territoryId = this.user?.territoryNumber;
+    }
+
+    console.log("State:", this.navigation?.extras.state);
 
     this.loading = true;
     this.territorySvc.getTerritory(territoryId).subscribe({
@@ -108,35 +143,86 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
           ? this.calculateDaysSinceAssignment(territory.assignmentDate)
           : null;
 
-        this.fetchBlockData();
+        // load current user role first, then show link button only if there is an assignment date
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        this.currentUserRole = user?.role || null;
+        this.showLinkAvailable = !!this.assignmentDate && this.canGenerateLink();
+
+        this.updateDashboard();
       },
       error: (err) => {
         this.loading = false;
         console.error('Error loading territory:', err);
+        if (err.status === 401 || err.status === 403) {
+          this.authService.logout();
+        }
       }
     });
   }
 
-  // ionViewWillEnter() {
-  //     this.fetchBlockData();
-  // }
+  private updateDashboard() {
+    console.log("Blocks for territory:", this.territory?.blocks);
 
-  fetchBlockData() {
-    
-      console.log("Blocks for territory:", this.territory?.blocks);
+    this.totalHouses = this.territory?.territoryTotalHouses || 0;
+    this.visitedHouses = this.territory?.territoryVisitedHouses || 0;
+    this.noOneHomeHouses = this.totalHouses - this.visitedHouses;
 
-      this.totalHouses = this.territory?.territoryTotalHouses || 0;
-      this.visitedHouses = this.territory?.territoryVisitedHouses || 0;
-      this.noOneHomeHouses = this.totalHouses - this.visitedHouses;
+    this.visitedPercentage = this.totalHouses
+      ? Math.round((this.visitedHouses / this.totalHouses) * 100)
+      : 0;
+    this.noOneHomePercentage = this.totalHouses
+      ? Math.round((this.noOneHomeHouses / this.totalHouses) * 100)
+      : 0;
 
-      this.visitedPercentage = this.totalHouses
-        ? Math.round((this.visitedHouses / this.totalHouses) * 100)
-        : 0;
-      this.noOneHomePercentage = this.totalHouses
-        ? Math.round((this.noOneHomeHouses / this.totalHouses) * 100)
-        : 0;
+    this.blocks = this.territory?.blocks || [];
+  }
 
-      this.blocks = this.territory?.blocks || [];
+  generateLinkForTerritory() {
+    if (!this.territory) return;
+    const linkRequest: LinkRequest = { territoryNumber: this.territory.territoryNumber, role: Role.PUBLISHER };
+    this.linkGenerator.generateTerritoryLink(linkRequest).subscribe({
+      next: (link) => {
+        this.generatedLink = link;
+        this.linkCopied = false;
+      },
+      error: (err) => {
+        console.error("Failed to get territory link", err);
+        if (err.status === 401 || err.status === 403) {
+          this.authService.logout();
+        }
+      }
+    });
+  }
+
+  async copyGeneratedLink() {
+    if (!this.generatedLink || this.linkCopied) return;
+    const text = this.generatedLink;
+    try {
+      if (navigator && typeof navigator.clipboard !== 'undefined') {
+        await navigator.clipboard.writeText(text);
+      } else {
+        this.fallbackCopyTextToClipboard(text);
+      }
+      this.linkCopied = true;
+    } catch (e) {
+      this.fallbackCopyTextToClipboard(text);
+      this.linkCopied = true;
+    }
+  }
+
+  private fallbackCopyTextToClipboard(text: string) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand('copy');
+    } catch (err) {
+      console.error('Fallback: Oops, unable to copy', err);
+    }
+    document.body.removeChild(textarea);
   }
 
   calculateDaysSinceAssignment(date: string): number {

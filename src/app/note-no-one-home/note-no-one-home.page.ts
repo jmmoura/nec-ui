@@ -4,6 +4,7 @@ import { IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, I
 import { Router } from '@angular/router';
 import { TerritorySummary } from '../model/TerritorySummary';
 import { TerritoryService } from '../service/territory/territory.service';
+import { AuthService } from '../service/authentication/auth.service';
 
 @Component({
   selector: 'app-note-no-one-home',
@@ -32,7 +33,8 @@ export class NoteNoOneHomePage implements OnInit {
 
   constructor(
     private router: Router,
-    private territorySvc: TerritoryService
+    private territorySvc: TerritoryService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit() {
@@ -49,6 +51,9 @@ export class NoteNoOneHomePage implements OnInit {
       error: (err) => {
         console.error('Error loading territories:', err);
         this.loading = false;
+        if (err.status === 401 || err.status === 403) {
+          this.authService.logout();
+        }
       },
     });
   }

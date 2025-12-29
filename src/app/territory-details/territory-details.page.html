@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
+    <ion-buttons slot="start" *ngIf="user?.territoryNumber == ''" >
       <ion-back-button defaultHref="/note-no-one-home"></ion-back-button>
     </ion-buttons>
     <ion-title>Território {{ territory?.territoryName }} - {{ territory?.territoryNumber }}</ion-title>
@@ -28,6 +28,17 @@
         </span>
         <ng-template #noDate></ng-template>
       </p>
+      <!-- Generate link button shown only when assignment date exists -->
+      <div *ngIf="showLinkAvailable" class="link-actions">
+        <ion-button size="small" color="tertiary" (click)="generateLinkForTerritory()">Gerar link</ion-button>
+      </div>
+      <div *ngIf="generatedLink" class="generated-link">
+        <ion-item>
+          <ion-textarea [value]="generatedLink" readonly auto-grow rows="2"></ion-textarea>
+          <ion-button slot="end" (click)="copyGeneratedLink()" [disabled]="linkCopied">{{ linkCopied ? 'Copiado' : 'Copiar' }}</ion-button>
+        </ion-item>
+        <ion-note *ngIf="linkCopied" color="success">Link copiado para a área de transferência.</ion-note>
+      </div>
     </div>
 
     <!-- Dashboard -->
@@ -87,7 +98,7 @@
       <ion-content>
         <div class="modal-map" #mapContainer>
           <img
-            [src]="territory?.mapPath"
+            [src]="territory?.territoryMapPath"
             alt="Mapa do Território {{ territory?.name }}"
             class="zoomable-map"
             #mapImage

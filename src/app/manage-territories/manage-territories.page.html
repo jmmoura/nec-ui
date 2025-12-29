@@ -109,9 +109,11 @@
             <ion-select
               [(ngModel)]="selectedTerritory.assignedToPersonId"
               name="assignedToPersonId"
+              #assignedToPersonId="ngModel"
               (ionChange)="onAssignedPersonChange($event)"
               interface="popover"
               placeholder="Selecione uma pessoa"
+              required
             >
               <ion-select-option *ngFor="let person of personList" [value]="person.id">
                 {{ person.name }}
@@ -122,11 +124,10 @@
           <ion-item>
             <ion-label position="stacked">Data da Designação</ion-label>
             <ion-input
-              [ngModel]="selectedTerritory.assignmentDate"
-              (ngModelChange)="selectedTerritory.assignmentDate = $event"
+              [(ngModel)]="selectedTerritory.assignmentDate"
               name="assignmentDate"
               type="date"
-              [required]="selectedTerritory.assignedToPersonId != null && selectedTerritory.assignedToPersonId !== ''"
+              required
               #assignmentDate="ngModel"
             ></ion-input>
           </ion-item>
@@ -156,6 +157,28 @@
               name="territoryWarningMessage"
             ></ion-textarea>
           </ion-item>
+
+          <!-- Link generation: available only when assignmentDate is present -->
+          <div class="link-section" *ngIf="showLinkAvailable">
+            <ion-button expand="block" color="tertiary" (click)="generateLinkForSelectedTerritory()">
+              Gerar link
+            </ion-button>
+
+            <div *ngIf="generatedLink" class="generated-link">
+              <ion-item>
+                <ion-textarea
+                  [value]="generatedLink"
+                  readonly
+                  auto-grow
+                  rows="2"
+                ></ion-textarea>
+                <ion-button slot="end" (click)="copyGeneratedLink()" [disabled]="linkCopied">
+                  {{ linkCopied ? 'Copiado' : 'Copiar' }}
+                </ion-button>
+              </ion-item>
+              <ion-note *ngIf="linkCopied" color="success">Link copiado para a área de transferência.</ion-note>
+            </div>
+          </div>
 
           <ion-button
             expand="block"

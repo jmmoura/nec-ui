@@ -1,3 +1,15 @@
 /* styles for manage-persons page */
-.spinner-wrap{ display:flex; align-items:center; justify-content:center; padding:32px 0; }
+.spinner-wrap {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px 0;
+	min-height: 60vh;
+}
+
+.spinner-wrap ion-spinner {
+	width: 64px;
+	height: 64px;
+	transform: scale(1.8);
+}
 

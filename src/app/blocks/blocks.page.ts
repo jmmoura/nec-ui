@@ -1,17 +1,36 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonCheckbox, IonList, IonItem, IonLabel, IonNote, IonSpinner } from '@ionic/angular/standalone';
-import { BlockDetails } from '../model/BlockDetails';
-import { TerritoryDetails } from '../model/TerritoryDetails';
-import { Address } from '../model/Address';
-import { BlockService } from '../service/block/block.service';
-import { AddressService } from '../service/address/address.service';
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { CommonModule } from "@angular/common";
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonButtons,
+  IonBackButton,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonCard,
+  IonCardContent,
+  IonCheckbox,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonNote,
+  IonSpinner,
+} from "@ionic/angular/standalone";
+import { BlockDetails } from "../model/BlockDetails";
+import { TerritoryDetails } from "../model/TerritoryDetails";
+import { Address } from "../model/Address";
+import { BlockService } from "../service/block/block.service";
+import { AddressService } from "../service/address/address.service";
+import { AuthService } from "../service/authentication/auth.service";
 
 @Component({
-  selector: 'app-blocks',
-  templateUrl: './blocks.page.html',
-  styleUrls: ['./blocks.page.scss'],
+  selector: "app-blocks",
+  templateUrl: "./blocks.page.html",
+  styleUrls: ["./blocks.page.scss"],
   standalone: true,
   imports: [
     CommonModule,
@@ -40,17 +59,22 @@ export class BlocksPage implements OnInit {
   block: BlockDetails | null = null;
   addressList: Address[] = [];
 
-  constructor(private router: Router, private blockSvc: BlockService, private addressSvc: AddressService) {}
+  constructor(
+    private router: Router,
+    private blockSvc: BlockService,
+    private addressSvc: AddressService,
+    private authService: AuthService,
+  ) {}
 
   ngOnInit() {
     const navigation = this.router.getCurrentNavigation();
     this.territory = navigation?.extras.state?.territory;
     const blockSummary = navigation?.extras.state?.block;
-    console.log('State:', navigation?.extras.state);
+    console.log("State:", navigation?.extras.state);
 
     if (!this.territory || !blockSummary) {
-      console.error('Territory or block data is missing!');
-      this.router.navigate(['/territory-details']);
+      console.error("Territory or block data is missing!");
+      this.router.navigate(["/territory-details"]);
     } else {
       this.loadBlockData(blockSummary.id);
     }
@@ -62,32 +86,43 @@ export class BlocksPage implements OnInit {
       next: (blockDetails) => {
         this.block = blockDetails;
         this.addressList = blockDetails.addressList || [];
-        this.addressList.map(address => {
+        this.addressList.map((address) => {
           address.id = address.id || 0;
-          address.street = address.street || '';
-          address.number = address.number || '';
+          address.street = address.street || "";
+          address.number = address.number || "";
           address.visitUnallowed = address.visitUnallowed || false;
           address.visitedAt = address.visitedAt || null;
-          address.visitTime = address.visitedAt ? this.getTimeOfDay(address.visitedAt) : null;
+          address.visitTime = address.visitedAt
+            ? this.getTimeOfDay(address.visitedAt)
+            : null;
           address.visited = !!address.visitedAt;
-        });          
+        });
         this.loading = false;
       },
       error: (err) => {
-        console.error('Error fetching block details:', err);
+        console.error("Error fetching block details:", err);
         this.loading = false;
-      }
+        if (err.status === 401 || err.status === 403) {
+          this.authService.logout();
+        }
+      },
     });
   }
 
   getTotalHouses(): number {
     // Exclude houses marked as "Não bater"
-    return this.addressList?.filter(address => !address.visitUnallowed).length || 0;
+    return (
+      this.addressList?.filter((address) => !address.visitUnallowed).length || 0
+    );
   }
 
   getVisitedHouses(): number {
     // Exclude houses marked as "Não bater"
-    return this.addressList?.filter(address => address.visitedAt && !address.visitUnallowed).length || 0;
+    return (
+      this.addressList?.filter(
+        (address) => address.visitedAt && !address.visitUnallowed
+      ).length || 0
+    );
   }
 
   getVisitedPercentage(): number {
@@ -107,11 +142,11 @@ export class BlocksPage implements OnInit {
   }
 
   getUniqueStreets(): string[] {
-    return [...new Set(this.addressList.map(address => address.street))];
+    return [...new Set(this.addressList.map((address) => address.street))];
   }
 
   getHousesByStreet(street: string): any[] {
-    return this.addressList.filter(address => address.street === street);
+    return this.addressList.filter((address) => address.street === street);
   }
 
   markVisited(house: Address, event: any) {
@@ -121,24 +156,24 @@ export class BlocksPage implements OnInit {
         house.visited = true;
         const date = new Date();
         // Create a formatter for the America/Sao_Paulo timezone in ISO format
-        const formatter = new Intl.DateTimeFormat('en-US', {
-          timeZone: 'America/Sao_Paulo',
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: false
+        const formatter = new Intl.DateTimeFormat("en-US", {
+          timeZone: "America/Sao_Paulo",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
         });
 
         const parts = formatter.formatToParts(date);
-        const year = parts.find(p => p.type === 'year')?.value;
-        const month = parts.find(p => p.type === 'month')?.value;
-        const day = parts.find(p => p.type === 'day')?.value;
-        const hour = parts.find(p => p.type === 'hour')?.value;
-        const minute = parts.find(p => p.type === 'minute')?.value;
-        const second = parts.find(p => p.type === 'second')?.value;
+        const year = parts.find((p) => p.type === "year")?.value;
+        const month = parts.find((p) => p.type === "month")?.value;
+        const day = parts.find((p) => p.type === "day")?.value;
+        const hour = parts.find((p) => p.type === "hour")?.value;
+        const minute = parts.find((p) => p.type === "minute")?.value;
+        const second = parts.find((p) => p.type === "second")?.value;
 
         house.visitedAt = `${year}-${month}-${day}T${hour}:${minute}:${second}`;
         house.visitTime = this.getTimeOfDay(house.visitedAt);
@@ -151,21 +186,23 @@ export class BlocksPage implements OnInit {
 
       this.addressSvc.updateAddress(house).subscribe({
         next: (updatedAddress) => {
-          console.log('Address updated successfully:', updatedAddress);
+          console.log("Address updated successfully:", updatedAddress);
         },
         error: (err) => {
-          console.error('Error updating address:', err);
-        }
+          console.error("Error updating address:", err);
+          if (err.status === 401 || err.status === 403) {
+            this.authService.logout();
+          }
+        },
       });
-
     }
   }
 
   getTimeOfDay(date: string): string {
     const hours = new Date(date).getHours();
-    if (hours < 6) return 'N'; // Noite
-    if (hours < 12) return 'M'; // Manhã
-    if (hours < 18) return 'T'; // Tarde
-    return 'N'; // Noite
+    if (hours < 6) return "N"; // Noite
+    if (hours < 12) return "M"; // Manhã
+    if (hours < 18) return "T"; // Tarde
+    return "N"; // Noite
   }
 }

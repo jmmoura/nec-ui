@@ -1,0 +1,15 @@
+/* Login page styles */
+ion-content {
+	--background: transparent;
+}
+
+.login-center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: calc(100vh - 56px); /* account for header */
+	padding: 16px;
+}
+
+.actions { margin-top: 16px; }
+.error { color: var(--ion-color-danger); margin-top: 8px; text-align: center; }
