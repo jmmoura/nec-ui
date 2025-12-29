@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { Subscription } from "rxjs";
 import {
   IonContent,
   IonHeader,
@@ -19,13 +18,12 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonToast,
 } from "@ionic/angular/standalone";
+import { ToastController } from "@ionic/angular";
 import { PersonService } from "../service/person/person.service";
 import { Person } from "src/app/model/Person";
 import { pencil, add, trash } from "ionicons/icons";
 import { AuthService } from "../service/authentication/auth.service";
-import { Router } from "@angular/router";
 
 @Component({
   selector: "app-manage-persons",
@@ -51,17 +49,15 @@ import { Router } from "@angular/router";
     IonGrid,
     IonRow,
     IonCol,
-    IonToast,
   ],
 })
 export class ManagePersonsPage implements OnInit {
   persons: Person[] = [];
   loading = false;
 
-  // Form model: only name
   form: Partial<Person> = {};
   isEditing = false;
-  toastMessage = "";
+  toast: any;
 
   // expose icons to the template
   readonly pencil = pencil;
@@ -70,7 +66,8 @@ export class ManagePersonsPage implements OnInit {
 
   constructor(
     private personService: PersonService,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastCtrl: ToastController,
   ) {}
 
   ngOnInit() {
@@ -127,13 +124,13 @@ export class ManagePersonsPage implements OnInit {
       }
       this.personService.add({ name }).subscribe({
         next: () => {
-          this.showToast("Pessoa adicionada.");
+          this.showToast("Pessoa adicionada.", "success");
           this.resetForm();
           this.loadPersons();
         },
         error: (err) => {
           console.error("Failed to add person", err);
-          this.showToast("Falha ao adicionar pessoa.");
+          this.showToast("Falha ao adicionar pessoa.", "danger");
           if (err.status === 401 || err.status === 403) {
             this.authService.logout();
           }
@@ -147,14 +144,14 @@ export class ManagePersonsPage implements OnInit {
       const updated: Person = { id: this.form.id as number, name };
       this.personService.update(updated).subscribe({
         next: () => {
-          this.showToast("Pessoa atualizada.");
+          this.showToast("Pessoa atualizada.", "success");
           this.resetForm();
           this.isEditing = false;
           this.loadPersons();
         },
         error: (err) => {
           console.error("Failed to update person", err);
-          this.showToast("Falha ao atualizar pessoa.");
+          this.showToast("Falha ao atualizar pessoa.", "danger");
           if (err.status === 401 || err.status === 403) {
             this.authService.logout();
           }
@@ -168,7 +165,7 @@ export class ManagePersonsPage implements OnInit {
     if (!ok) return;
     this.personService.remove(p.id as number).subscribe({
       next: () => {
-        this.showToast("Pessoa removida.");
+        this.showToast("Pessoa removida.", "success");
         if (this.isEditing && this.form?.id === p.id) {
           this.resetForm();
         }
@@ -176,7 +173,7 @@ export class ManagePersonsPage implements OnInit {
       },
       error: (err) => {
         console.error("Failed to remove person", err);
-        this.showToast("Falha ao remover pessoa.");
+        this.showToast("Falha ao remover pessoa.", "danger");
         if (err.status === 401 || err.status === 403) {
           this.authService.logout();
         }
@@ -189,8 +186,12 @@ export class ManagePersonsPage implements OnInit {
     this.isEditing = false;
   }
 
-  private showToast(msg: string) {
-    this.toastMessage = msg;
-    setTimeout(() => (this.toastMessage = ""), 2500);
+  private async showToast(message: string, color: string = "primary") {
+    this.toast = await this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      color: color,
+    });
+    this.toast.present();
   }
 }

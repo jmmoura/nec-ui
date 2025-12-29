@@ -39,6 +39,7 @@ import { Role } from "../model/Role";
 import { LinkRequest } from "../model/LinkRequest";
 import { AuthService } from "../service/authentication/auth.service";
 import { DateOrderDirective } from "../shared/validators/date-order.directive";
+import { ToastController } from "@ionic/angular";
 
 @Component({
   selector: "app-manage-territories",
@@ -95,12 +96,14 @@ export class ManageTerritoriesPage implements OnInit {
   linkCopied = false;
   showLinkAvailable = false;
   isGeneratingLink = false;
+  toast: any;
 
   constructor(
     private assignmentSvc: AssignmentService,
     private personSvc: PersonService,
     private linkGeneratorSvc: LinkGeneratorService,
     private authService: AuthService,
+    private toastCtrl: ToastController,
   ) {}
 
   ngOnInit() {
@@ -217,9 +220,11 @@ export class ManageTerritoriesPage implements OnInit {
         this.showLinkAvailable = !!updatedTerritory.assignmentDate && !updatedTerritory.completedDate;
         this.generatedLink = null;
         this.linkCopied = false;
+        this.showToast("Território salvo com sucesso.", "success");
       },
       error: (err: any) => {
         console.error("Failed to update territory", err);
+        this.showToast("Falha ao salvar território.", "danger");
         if (err.status === 401 || err.status === 403) {
           this.isEditTerritoryModalOpen = false;
           this.authService.logout();
@@ -246,6 +251,7 @@ export class ManageTerritoriesPage implements OnInit {
       error: (err: any) => {
         this.isGeneratingLink = false;
         console.error("Failed to get territory link", err);
+        this.showToast("Falha ao gerar link.", "danger");
         if (err.status === 401 || err.status === 403) {
           this.authService.logout();
         }
@@ -283,5 +289,14 @@ export class ManageTerritoriesPage implements OnInit {
       console.error('Fallback: Oops, unable to copy', err);
     }
     document.body.removeChild(textarea);
+  }
+
+  private async showToast(message: string, color: string = "primary") {
+    this.toast = await this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      color: color,
+    });
+    this.toast.present();
   }
 }

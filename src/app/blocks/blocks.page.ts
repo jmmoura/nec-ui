@@ -204,7 +204,7 @@ export class BlocksPage implements OnInit {
           house.visitTime = prevVisitTime;
 
           // Show a toast to the user
-          this.presentToast("Erro ao atualizar o endereço. A alteração foi revertida.", "danger");
+          this.showToast("Erro ao atualizar o endereço. A alteração foi revertida.", "danger");
 
           if (err.status === 401 || err.status === 403) {
             this.authService.logout();
@@ -214,7 +214,7 @@ export class BlocksPage implements OnInit {
     }
   }
 
-  async presentToast(message: string, color: string = "primary") {
+  private async showToast(message: string, color: string = "primary") {
     this.toast = await this.toastCtrl.create({
       message: message,
       duration: 3000,
