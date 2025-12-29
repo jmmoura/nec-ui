@@ -19,7 +19,9 @@ import {
   IonLabel,
   IonNote,
   IonSpinner,
-  ToastController
+  ToastController,
+  IonButton,
+  IonIcon,
 } from "@ionic/angular/standalone";
 import { BlockDetails } from "../model/BlockDetails";
 import { TerritoryDetails } from "../model/TerritoryDetails";
@@ -27,6 +29,7 @@ import { Address } from "../model/Address";
 import { BlockService } from "../service/block/block.service";
 import { AddressService } from "../service/address/address.service";
 import { AuthService } from "../service/authentication/auth.service";
+import { logOutOutline } from 'ionicons/icons';
 
 @Component({
   selector: "app-blocks",
@@ -52,9 +55,12 @@ import { AuthService } from "../service/authentication/auth.service";
     IonLabel,
     IonNote,
     IonSpinner,
+    IonButton,
+    IonIcon,
   ],
 })
 export class BlocksPage implements OnInit {
+  readonly logOutIcon = logOutOutline;
   loading = false;
   territory: TerritoryDetails | null = null;
   block: BlockDetails | null = null;
@@ -81,6 +87,10 @@ export class BlocksPage implements OnInit {
     } else {
       this.loadBlockData(blockSummary.id);
     }
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
   loadBlockData(blockId: number) {

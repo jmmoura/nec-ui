@@ -4,6 +4,12 @@
       <ion-back-button defaultHref="/territory-details"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ territory?.territoryName }} - {{ territory?.territoryNumber }} / Quadra {{ block?.name }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="medium" (click)="logout()">
+        <ion-icon slot="start" [icon]="logOutIcon"></ion-icon>
+        Sair
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

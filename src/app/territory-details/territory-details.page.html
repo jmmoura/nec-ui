@@ -4,6 +4,12 @@
       <ion-back-button defaultHref="/note-no-one-home"></ion-back-button>
     </ion-buttons>
     <ion-title>Território {{ territory?.territoryName }} - {{ territory?.territoryNumber }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="medium" (click)="logout()">
+        <ion-icon slot="start" [icon]="logOutIcon"></ion-icon>
+        Sair
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

@@ -25,6 +25,8 @@ import {
   IonModal,
   IonTextarea,
   IonSpinner,
+  IonButton,
+  IonIcon,
 } from "@ionic/angular/standalone";
 import { Navigation, Router } from "@angular/router";
 import { TerritoryDetails } from "../model/TerritoryDetails";
@@ -35,6 +37,7 @@ import { AuthService } from "../service/authentication/auth.service";
 import { LinkGeneratorService } from '../service/link-generator/link-generator.service';
 import { LinkRequest } from '../model/LinkRequest';
 import { Role } from '../model/Role';
+import { logOutOutline } from 'ionicons/icons';
 
 @Component({
   selector: "app-territory-details",
@@ -61,9 +64,12 @@ import { Role } from '../model/Role';
     IonModal,
     IonSpinner,
     IonTextarea,
+    IonButton,
+    IonIcon,
   ],
 })
 export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
+  readonly logOutIcon = logOutOutline;
   loading = false;
   @ViewChild("mapImage", { static: false })
   mapImage!: ElementRef<HTMLImageElement>;
@@ -110,16 +116,19 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
 
   }
 
-  canGenerateLink(): boolean {
-    return this.currentUserRole === Role.CONDUCTOR || this.currentUserRole === Role.ADMIN;
-  }
-
   ionViewWillEnter() {
     this.fetchBlockData();
   }
 
+  logout() {
+    this.authService.logout();
+  }
+
+  canGenerateLink(): boolean {
+    return this.currentUserRole === Role.CONDUCTOR || this.currentUserRole === Role.ADMIN;
+  }
+
   fetchBlockData() {
-    // const navigation = this.router.getCurrentNavigation();
 
     this.user = JSON.parse(localStorage.getItem('user') || 'null');
 
