@@ -20,6 +20,7 @@ import {
   IonNote,
   IonSpinner,
 } from "@ionic/angular/standalone";
+import { ToastController } from "@ionic/angular";
 import { BlockDetails } from "../model/BlockDetails";
 import { TerritoryDetails } from "../model/TerritoryDetails";
 import { Address } from "../model/Address";
@@ -58,12 +59,14 @@ export class BlocksPage implements OnInit {
   territory: TerritoryDetails | null = null;
   block: BlockDetails | null = null;
   addressList: Address[] = [];
+  toast: any;
 
   constructor(
     private router: Router,
     private blockSvc: BlockService,
     private addressSvc: AddressService,
     private authService: AuthService,
+    private toastCtrl: ToastController,
   ) {}
 
   ngOnInit() {
@@ -151,6 +154,11 @@ export class BlocksPage implements OnInit {
 
   markVisited(house: Address, event: any) {
     if (!house.visitUnallowed) {
+      // capture previous state so we can revert on failure
+      const prevVisited = !!house.visited;
+      const prevVisitedAt = house.visitedAt;
+      const prevVisitTime = house.visitTime;
+
       if (event.detail.checked) {
         // Mark as visited
         house.visited = true;
@@ -188,14 +196,31 @@ export class BlocksPage implements OnInit {
         next: (updatedAddress) => {
           console.log("Address updated successfully:", updatedAddress);
         },
-        error: (err) => {
+        error: async (err) => {
           console.error("Error updating address:", err);
+          // Revert UI state to previous values
+          house.visited = prevVisited;
+          house.visitedAt = prevVisitedAt;
+          house.visitTime = prevVisitTime;
+
+          // Show a toast to the user
+          this.presentToast("Erro ao atualizar o endereço. A alteração foi revertida.", "danger");
+
           if (err.status === 401 || err.status === 403) {
             this.authService.logout();
           }
         },
       });
     }
+  }
+
+  async presentToast(message: string, color: string = "primary") {
+    this.toast = await this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      color: color,
+    });
+    this.toast.present();
   }
 
   getTimeOfDay(date: string): string {

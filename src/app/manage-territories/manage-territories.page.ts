@@ -28,7 +28,6 @@ import {
   IonSelect,
   IonSelectOption,
   IonText,
-  IonSpinner,
 } from "@ionic/angular/standalone";
 
 import { TerritoryAssignment } from "../model/TerritoryAssignment";
@@ -39,6 +38,7 @@ import { LinkGeneratorService } from 'src/app/service/link-generator/link-genera
 import { Role } from "../model/Role";
 import { LinkRequest } from "../model/LinkRequest";
 import { AuthService } from "../service/authentication/auth.service";
+import { DateOrderDirective } from "../shared/validators/date-order.directive";
 
 @Component({
   selector: "app-manage-territories",
@@ -72,6 +72,7 @@ import { AuthService } from "../service/authentication/auth.service";
     IonSelect,
     IonSelectOption,
     IonText,
+    DateOrderDirective,
   ],
 })
 export class ManageTerritoriesPage implements OnInit {
@@ -90,12 +91,9 @@ export class ManageTerritoriesPage implements OnInit {
 
   personList: Person[] = [];
 
-  // generated link shown in modal and flag to prevent multiple copies
   generatedLink: string | null = null;
   linkCopied = false;
-  // Show link controls only when assignmentDate is present
   showLinkAvailable = false;
-  // indicate generation in progress
   isGeneratingLink = false;
 
   constructor(
@@ -167,7 +165,7 @@ export class ManageTerritoriesPage implements OnInit {
         territoryName: this.newTerritory.name,
         assignedToPersonId: null,
         assignmentDate: null,
-        completedDate: null, // ensure field exists on new entries
+        completedDate: null,
       });
       this.calculateStatistics();
       this.closeAddTerritoryModal();
@@ -198,7 +196,7 @@ export class ManageTerritoriesPage implements OnInit {
     this.isEditTerritoryModalOpen = true;
     this.generatedLink = null;
     this.linkCopied = false;
-    this.showLinkAvailable = !!this.selectedTerritory?.assignmentDate;
+    this.showLinkAvailable = !!this.selectedTerritory?.assignmentDate && !this.selectedTerritory?.completedDate;
   }
 
   closeEditTerritoryModal() {
@@ -216,13 +214,14 @@ export class ManageTerritoriesPage implements OnInit {
         // Refresh list and keep modal open; update selected territory and link availability
         this.loadTerritories();
         this.selectedTerritory = { ...updatedTerritory };
-        this.showLinkAvailable = !!updatedTerritory.assignmentDate;
+        this.showLinkAvailable = !!updatedTerritory.assignmentDate && !updatedTerritory.completedDate;
         this.generatedLink = null;
         this.linkCopied = false;
       },
       error: (err: any) => {
         console.error("Failed to update territory", err);
         if (err.status === 401 || err.status === 403) {
+          this.isEditTerritoryModalOpen = false;
           this.authService.logout();
         }
       },

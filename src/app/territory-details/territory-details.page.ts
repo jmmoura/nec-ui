@@ -147,7 +147,7 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
         // load current user role first, then show link button only if there is an assignment date
         const user = JSON.parse(localStorage.getItem('user') || 'null');
         this.currentUserRole = user?.role || null;
-        this.showLinkAvailable = !!this.assignmentDate && this.canGenerateLink();
+        this.showLinkAvailable = !!this.assignmentDate && this.canGenerateLink() && !(this.territory as any)?.completedDate;
 
         this.updateDashboard();
       },

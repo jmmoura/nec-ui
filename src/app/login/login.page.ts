@@ -5,8 +5,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import {
   IonContent,
   IonHeader,
-  IonTitle,
-  IonToolbar,
   IonItem,
   IonLabel,
   IonInput,
@@ -29,8 +27,6 @@ import { SharedLink } from "../model/SharedLink";
   imports: [
     IonContent,
     IonHeader,
-    IonTitle,
-    IonToolbar,
     IonItem,
     IonLabel,
     IonInput,

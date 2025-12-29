@@ -52,7 +52,6 @@
               <ion-card-content class="text-center">
                 <p><strong>{{ territory.assignedToPersonName || '' }}</strong></p>
                 <p><strong>{{ territory.assignmentDate | date:'dd/MM/yyyy' || '' }}</strong></p>
-                <!-- Display complete date -->
                 <p><strong>{{ territory.completedDate | date:'dd/MM/yyyy' || '' }}</strong></p>
               </ion-card-content>
             </ion-card>
@@ -75,7 +74,7 @@
       </ion-header>
 
       <ion-content *ngIf="selectedTerritory">
-        <form (ngSubmit)="saveTerritory()" #territoryForm="ngForm">
+        <form (ngSubmit)="saveTerritory()" #territoryForm="ngForm" appDateOrder [start]="assignmentDate" [end]="completedDate">
           <ion-item>
             <ion-label position="stacked">Nome do Território</ion-label>
             <ion-input
@@ -103,7 +102,6 @@
             Número do Território é obrigatório.
           </ion-note>
 
-          <!-- Designado para: replaced with select -->
           <ion-item>
             <ion-label position="stacked">Designado para</ion-label>
             <ion-select
@@ -135,10 +133,9 @@
             *ngIf="assignmentDate.invalid && assignmentDate.touched"
             color="danger"
           >
-            Data de Designação é obrigatória se "Designado para" estiver preenchido.
+            Data da Designação é obrigatória se "Designado para" estiver preenchido.
           </ion-note>
 
-          <!-- complete Date (Data da Conclusão) - made optional -->
           <ion-item>
             <ion-label position="stacked">Data da Conclusão</ion-label>
             <ion-input
@@ -149,6 +146,9 @@
               #completedDate="ngModel"
             ></ion-input>
           </ion-item>
+          <ion-note *ngIf="completedDate?.errors?.dateOrder && completedDate.touched" color="danger">
+            Data da Conclusão deve ser posterior à Data da Designação.
+          </ion-note>
 
           <ion-item>
             <ion-label position="stacked">Mensagem de Aviso</ion-label>
@@ -158,8 +158,8 @@
             ></ion-textarea>
           </ion-item>
 
-          <!-- Link generation: available only when assignmentDate is present -->
-          <div class="link-section" *ngIf="showLinkAvailable">
+          <!-- Link generation: available only when assignmentDate is present and territory not completed -->
+          <div class="link-section" *ngIf="showLinkAvailable && !selectedTerritory.completedDate">
             <ion-button expand="block" color="tertiary" (click)="generateLinkForSelectedTerritory()" [disabled]="isGeneratingLink">
               <ion-spinner *ngIf="isGeneratingLink" slot="start" name="crescent"></ion-spinner>
               {{ isGeneratingLink ? 'Gerando...' : 'Gerar link' }}
