@@ -1,6 +1,6 @@
 {
-  "name": "app",
-  "short_name": "app",
+  "name": "Projeto NEC",
+  "short_name": "NEC",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
