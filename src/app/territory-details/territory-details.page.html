@@ -42,10 +42,21 @@
         </ion-button>
       </div>
       <div *ngIf="generatedLink" class="generated-link">
-        <ion-item>
+        <ion-item lines="none">
           <ion-textarea [value]="generatedLink" readonly auto-grow rows="2"></ion-textarea>
-          <ion-button slot="end" (click)="copyGeneratedLink()" [disabled]="linkCopied">{{ linkCopied ? 'Copiado' : 'Copiar' }}</ion-button>
         </ion-item>
+        <div class="link-actions-below">
+          <ion-button (click)="copyGeneratedLink()" [disabled]="linkCopied">{{ linkCopied ? 'Copiado' : 'Copiar' }}</ion-button>
+          <ion-button fill="clear" color="primary" (click)="shareTerritoryLink()" aria-label="Compartilhar">
+            <ion-icon slot="icon-only" name="share-outline" size="large"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" color="success" (click)="shareViaWhatsApp()" aria-label="WhatsApp">
+            <ion-icon slot="icon-only" name="logo-whatsapp" size="large"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" color="medium" (click)="shareViaEmail()" aria-label="Email">
+            <ion-icon slot="icon-only" name="mail-outline" size="large"></ion-icon>
+          </ion-button>
+        </div>
         <ion-note *ngIf="linkCopied" color="success">Link copiado para a área de transferência.</ion-note>
       </div>
     </div>

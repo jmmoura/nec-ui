@@ -86,15 +86,15 @@
 
 /* generated link area */
 .generated-link ion-item {
-  align-items: center;
+  align-items: stretch;
 }
 
 .generated-link ion-textarea {
   --padding-start: 8px;
   --padding-end: 8px;
   width: 100%;
-  min-height: 44px;
-  max-height: 240px;
+  --min-height: 64px;
+  max-height: none; /* allow full auto-grow */
   overflow: auto;
   white-space: normal;
   word-break: break-all;
@@ -102,4 +102,14 @@
 
 .link-actions {
   margin-top: 8px;
+}
+
+.generated-link .link-actions-below {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  width: 100%;
 }

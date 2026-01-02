@@ -37,7 +37,9 @@ import { AuthService } from "../service/authentication/auth.service";
 import { LinkGeneratorService } from '../service/link-generator/link-generator.service';
 import { LinkRequest } from '../model/LinkRequest';
 import { Role } from '../model/Role';
-import { logOutOutline } from 'ionicons/icons';
+import { logOutOutline, shareOutline, logoWhatsapp, mailOutline } from 'ionicons/icons';
+import { addIcons } from 'ionicons';
+import { Share } from '@capacitor/share';
 
 @Component({
   selector: "app-territory-details",
@@ -109,7 +111,8 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
     private territorySvc: TerritoryService,
     private authService: AuthService,
     private linkGenerator: LinkGeneratorService,
-  ) {}
+  ) {
+      addIcons({shareOutline,logoWhatsapp,mailOutline});}
 
   ngOnInit() {
     this.navigation = this.router.getCurrentNavigation();
@@ -221,6 +224,40 @@ export class TerritoryDetailsPage implements OnInit, AfterViewChecked {
       this.fallbackCopyTextToClipboard(text);
       this.linkCopied = true;
     }
+  }
+
+  async shareTerritoryLink() {
+    if (!this.generatedLink || !this.territory) return;
+    const title = `Território ${this.territory.territoryNumber}`;
+    const text = `Acesse o território ${this.territory.territoryNumber}: ${this.generatedLink}`;
+    try {
+      await Share.share({ title, text, url: this.generatedLink, dialogTitle: 'Compartilhar link do território' });
+    } catch (err) {
+      if (navigator && (navigator as any).share) {
+        try {
+          await (navigator as any).share({ title, text, url: this.generatedLink });
+        } catch (e) {
+          console.warn('Web Share cancelled or failed:', e);
+        }
+      } else {
+        const body = encodeURIComponent(text);
+        window.location.href = `mailto:?subject=${encodeURIComponent(title)}&body=${body}`;
+      }
+    }
+  }
+
+  shareViaWhatsApp() {
+    if (!this.generatedLink || !this.territory) return;
+    const msg = `Território ${this.territory.territoryNumber}\n${this.generatedLink}`;
+    const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+  }
+
+  shareViaEmail() {
+    if (!this.generatedLink || !this.territory) return;
+    const subject = `Território ${this.territory.territoryNumber}`;
+    const body = `Link do território:\n${this.generatedLink}`;
+    window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 
   private fallbackCopyTextToClipboard(text: string) {
