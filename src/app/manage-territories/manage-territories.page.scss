@@ -42,21 +42,31 @@ ion-grid.territory-grid ion-col ion-card-content {
   margin-top: 12px;
 }
 
-.generated-link ion-item {
-  align-items: center;
-}
-
-.generated-link ion-textarea {
+.generated-link .generated-link-item {
+  display: flex;
+  align-items: stretch;
   --padding-start: 8px;
   --padding-end: 8px;
+  --inner-padding-end: 8px;
+}
+
+.generated-link .generated-link-item ion-textarea {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  flex: 1 1 auto;
+  min-width: 0; /* allow flexbox to shrink properly */
   width: 100%;
-  min-height: 44px;
-  max-height: 240px;
+  --min-height: 64px;
   overflow: auto;
+  max-height: none; /* allow full auto-grow without cap */
   white-space: normal;
   word-break: break-all;
 }
 
-.generated-link ion-item ion-button[slot="end"] {
-  margin-left: 8px;
+.generated-link .link-actions-below {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
 }

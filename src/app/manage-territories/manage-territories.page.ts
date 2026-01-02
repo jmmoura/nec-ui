@@ -28,6 +28,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonText,
+  IonIcon,
   ToastController
 } from "@ionic/angular/standalone";
 
@@ -40,6 +41,10 @@ import { Role } from "../model/Role";
 import { LinkRequest } from "../model/LinkRequest";
 import { AuthService } from "../service/authentication/auth.service";
 import { DateOrderDirective } from "../shared/validators/date-order.directive";
+import { AddressService } from "../service/address/address.service";
+import { Share } from '@capacitor/share';
+import { addIcons } from 'ionicons';
+import { shareOutline, logoWhatsapp, mailOutline } from 'ionicons/icons';
 
 @Component({
   selector: "app-manage-territories",
@@ -73,6 +78,7 @@ import { DateOrderDirective } from "../shared/validators/date-order.directive";
     IonSelect,
     IonSelectOption,
     IonText,
+    IonIcon,
     DateOrderDirective,
   ],
 })
@@ -104,9 +110,17 @@ export class ManageTerritoriesPage implements OnInit {
     private linkGeneratorSvc: LinkGeneratorService,
     private authService: AuthService,
     private toastCtrl: ToastController,
-  ) {}
+    private addressSvc: AddressService,
+  ) {
+      addIcons({shareOutline,logoWhatsapp,mailOutline});}
 
   ngOnInit() {
+    // Ensure required Ionicons are registered so they display correctly
+    addIcons({
+      'share-outline': shareOutline,
+      'logo-whatsapp': logoWhatsapp,
+      'mail-outline': mailOutline,
+    });
     this.loadTerritories();
     this.loadPersonList();
   }
@@ -298,5 +312,74 @@ export class ManageTerritoriesPage implements OnInit {
       color: color,
     });
     this.toast.present();
+  }
+
+  async shareTerritoryLink() {
+    if (!this.generatedLink) {
+      this.showToast('Gere o link antes de compartilhar', 'warning');
+      return;
+    }
+    const title = this.selectedTerritory?.territoryName || `Território ${this.selectedTerritory?.territoryNumber || ''}`;
+    const text = `Acesse o território ${this.selectedTerritory?.territoryNumber || ''}`;
+    const url = this.generatedLink;
+    try {
+      // Prefer Capacitor native share when available (installed app / mobile)
+      const can = await Share.canShare();
+      if (can?.value) {
+        await Share.share({ title, text, url, dialogTitle: 'Compartilhar território' });
+        return;
+      }
+      // Fallback to Web Share API on supporting browsers
+      if (navigator && 'share' in navigator) {
+        await (navigator as any).share({ title, text, url });
+        return;
+      }
+      // Last resort: guide user to use specific channels
+      this.showToast('Compartilhamento do sistema não disponível. Use WhatsApp ou Email.', 'medium');
+    } catch (e) {
+      // User cancelled or error
+      this.showToast('Compartilhamento cancelado ou indisponível.', 'warning');
+    }
+  }
+
+  shareViaWhatsApp() {
+    if (!this.generatedLink) {
+      this.showToast('Gere o link antes de compartilhar', 'warning');
+      return;
+    }
+    const message = `Território ${this.selectedTerritory?.territoryNumber || ''} - ${this.selectedTerritory?.territoryName || ''}\n${this.generatedLink}`;
+    const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank');
+  }
+
+  shareViaEmail() {
+    if (!this.generatedLink) {
+      this.showToast('Gere o link antes de compartilhar', 'warning');
+      return;
+    }
+    const subject = `Território ${this.selectedTerritory?.territoryNumber || ''} - ${this.selectedTerritory?.territoryName || ''}`;
+    const body = `Olá,\n\nSegue o link do território:\n${this.generatedLink}\n\nObrigado.`;
+    const mailtoUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoUrl;
+  }
+
+  resetVisitedHousesForSelectedTerritory() {
+    if (!this.selectedTerritory || !this.selectedTerritory.territoryNumber) {
+      return;
+    }
+    const territoryNumber = this.selectedTerritory.territoryNumber;
+    this.addressSvc.resetAddress({ territoryNumber }).subscribe({
+      next: () => {
+        this.showToast("Casas desmarcadas.", "success");
+      },
+      error: (err: any) => {
+        console.error("Failed to reset visited houses", err);
+        this.showToast("Falha ao desmarcar casas.", "danger");
+        if (err.status === 401 || err.status === 403) {
+          this.isEditTerritoryModalOpen = false;
+          this.authService.logout();
+        }
+      },
+    });
   }
 }
