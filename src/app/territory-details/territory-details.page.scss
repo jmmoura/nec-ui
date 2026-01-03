@@ -1,4 +1,7 @@
-/* filepath: /Users/i548587/Documents/personal/projects/nec-ui/src/app/territory-details/territory-details.page.scss */
+/* Add only right-edge spacing for the block grid container */
+.block-grid {
+  padding-right: 24px; /* creates gap at the screen edge, keeps columns untouched */
+}
 .square-card {
   display: flex;
   justify-content: center;
@@ -7,7 +10,8 @@
   width: 100%; /* Full width of the column */
   aspect-ratio: 1; /* Ensures the card is square */
   text-align: center;
-  background-color: var(--ion-card-background, #ffffff);
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -15,7 +19,7 @@
 .block-text {
   font-size: 1.2rem;
   font-weight: bold;
-  color: var(--ion-text-color, #000);
+  color: var(--ion-color-primary-contrast);
 }
 
 .warning-message {
@@ -49,6 +53,29 @@
 
 .labels p {
   margin: 8px 0;
+}
+/* Dashboard uses primary across list and items */
+.dashboard ion-card {
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+}
+
+.dashboard ion-card ion-list {
+  background: var(--ion-color-primary);
+  --background: var(--ion-color-primary);
+}
+
+.dashboard ion-card ion-item {
+  background: var(--ion-color-primary);
+  --background: var(--ion-color-primary);
+  --inner-background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
+  --border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dashboard ion-card ion-item ion-label,
+.dashboard ion-card ion-item ion-note {
+  color: var(--ion-color-primary-contrast);
 }
 
 .territory-image {
@@ -112,4 +139,12 @@
   margin-top: 8px;
   flex-wrap: wrap;
   width: 100%;
+}
+
+/* Light theme: soft gray background for the generated link ion-item */
+@media (prefers-color-scheme: light) {
+  .generated-link ion-item {
+    background-color: var(--nec-gray-50);
+    --background: var(--nec-gray-50);
+  }
 }

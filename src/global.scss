@@ -9,6 +9,9 @@
  * https://ionicframework.com/docs/layout/global-stylesheets
  */
 
+/* App Theme Variables (Sass @use must come before any rules) */
+@use './theme/variables' as *;
+
 /* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
 
@@ -25,6 +28,7 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
+
 /**
  * Ionic Dark Mode
  * -----------------------------------------------------
@@ -35,3 +39,32 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+/* Toolbar and menu: use theme variables for light/dark */
+@media (prefers-color-scheme: light) {
+	ion-toolbar {
+		--background: var(--nec-gray-100);
+		background: var(--nec-gray-100);
+		--color: var(--ion-text-color);
+		border-bottom: 1px solid var(--nec-border);
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	ion-toolbar {
+		--background: #2b2b2b;
+		background: #2b2b2b;
+		--color: #e5e7eb; /* light grey text */
+		border-bottom: 1px solid #3a3a3a;
+	}
+}
+
+/* Optional: menu/list greys */
+ion-menu, ion-list {
+	--background: #f7f7f7;
+}
+@media (prefers-color-scheme: dark) {
+	ion-menu, ion-list {
+		--background: #202020;
+	}
+}

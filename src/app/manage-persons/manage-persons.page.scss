@@ -13,3 +13,18 @@
 	transform: scale(1.8);
 }
 
+
+/* Light theme: apply soft gray background to items inside lists (columns only) */
+@media (prefers-color-scheme: light) {
+	ion-grid ion-col ion-list ion-item {
+		background-color: var(--nec-gray-50);
+		--background: var(--nec-gray-50);
+	}
+
+	/* Match form items background to the column/list tone */
+	ion-grid ion-col form ion-item {
+		background-color: var(--nec-gray-50);
+		--background: var(--nec-gray-50);
+	}
+}
+

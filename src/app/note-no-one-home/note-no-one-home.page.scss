@@ -1,3 +1,49 @@
+/* Territory selection grid styling aligned with Manage Territories */
+
+.square-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100px;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  /* Apply app primary color across themes */
+  --background: #5b3c89; /* Ensure ion-card host uses primary */
+  background-color: #5b3c89;
+  border: 1px solid var(--ion-color-primary-shade);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  color: #ffffff; /* High contrast text */
+}
+
+.square-card ion-card-header,
+.square-card ion-card-title {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* Unassigned variant not used here; all cards share primary styling */
+
+/* Light theme: keep contrast clear */
+@media (prefers-color-scheme: light) {
+  .square-card {
+    --background: #5b3c89;
+    background-color: #5b3c89;
+    border-color: var(--ion-color-primary-shade);
+    color: #ffffff;
+  }
+}
+
+/* Dark theme: adjust slightly for readability */
+@media (prefers-color-scheme: dark) {
+  .square-card {
+    --background: #5b3c89;
+    background-color: #5b3c89;
+    border-color: var(--ion-color-primary);
+    color: #ffffff;
+  }
+}
 /* Styles for Note No One Home Page */
 
 .square-card {

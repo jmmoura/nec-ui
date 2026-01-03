@@ -1,3 +1,46 @@
+/* Apply app primary color (#5b3c89) to all Home page cards */
+
+ion-card {
+  /* Ensure ion-card host uses primary background */
+  --background: #5b3c89;
+  background-color: #5b3c89;
+  border: 1px solid var(--ion-color-primary-shade);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  color: #ffffff; /* High-contrast text */
+}
+
+/* Make common text elements inside the card high-contrast */
+ion-card ion-card-header,
+ion-card ion-card-title,
+ion-card ion-card-content,
+ion-card p,
+ion-card strong,
+ion-card ion-text,
+ion-card ion-item,
+ion-card ion-label,
+ion-card ion-note {
+  color: #ffffff;
+}
+
+/* Light theme keeps same primary style */
+@media (prefers-color-scheme: light) {
+  ion-card {
+    --background: #5b3c89;
+    background-color: #5b3c89;
+    border-color: var(--ion-color-primary-shade);
+    color: #ffffff;
+  }
+}
+
+/* Dark theme keeps same primary style */
+@media (prefers-color-scheme: dark) {
+  ion-card {
+    --background: #5b3c89;
+    background-color: #5b3c89;
+    border-color: var(--ion-color-primary);
+    color: #ffffff;
+  }
+}
 #container {
   text-align: center;
 

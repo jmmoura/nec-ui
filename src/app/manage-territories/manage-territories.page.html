@@ -33,7 +33,7 @@
     </ion-card>
   </div>
 
-  <ion-card>
+  <ion-card class="territories-wrapper">
     <ion-card-header>
       <ion-card-title>Territórios</ion-card-title>
     </ion-card-header>
@@ -41,7 +41,7 @@
       <ion-grid class="territory-grid">
         <ion-row>
           <ion-col size="6" size-md="4" *ngFor="let territory of territories">
-            <ion-card (click)="openEditTerritoryModal(territory)">
+            <ion-card (click)="openEditTerritoryModal(territory)" [class.unassigned]="!territory.assignedToPersonName">
               <ion-card-header>
                 <ion-card-title>
                   <ion-text class="text-center">

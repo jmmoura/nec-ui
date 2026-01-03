@@ -72,3 +72,79 @@ ion-grid.territory-grid ion-col ion-card-content {
   flex-wrap: wrap;
   width: 100%;
 }
+
+/* Light theme: soft gray background for the generated link item in edit modal */
+@media (prefers-color-scheme: light) {
+  .generated-link .generated-link-item {
+    background-color: var(--nec-gray-50);
+    --background: var(--nec-gray-50);
+  }
+}
+
+/* Theme application: dashboards and territory cards */
+.dashboard ion-card {
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+}
+
+.dashboard ion-card ion-list {
+  background: var(--ion-color-primary);
+  --background: var(--ion-color-primary);
+}
+
+.dashboard ion-card ion-item {
+  background: var(--ion-color-primary);
+  --background: var(--ion-color-primary);
+  --inner-background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
+  --border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dashboard ion-card ion-item ion-label,
+.dashboard ion-card ion-item ion-note {
+  color: var(--ion-color-primary-contrast);
+}
+
+ion-grid.territory-grid ion-col ion-card {
+  background: var(--ion-color-primary-shade); /* assigned: darker shade */
+  color: var(--ion-color-primary-contrast);
+}
+
+ion-grid.territory-grid ion-col ion-card.unassigned {
+  background: var(--ion-color-primary-tint); /* unassigned: lighter tint */
+  color: var(--ion-color-primary-contrast);
+}
+
+ion-grid.territory-grid ion-col ion-card ion-card-title,
+ion-grid.territory-grid ion-col ion-card ion-card-content,
+ion-grid.territory-grid ion-col ion-card p,
+ion-grid.territory-grid ion-col ion-card strong {
+  color: inherit;
+}
+
+/* Ensure territory number is high-contrast */
+ion-grid.territory-grid ion-col ion-card ion-card-header ion-card-title strong,
+ion-grid.territory-grid ion-col ion-card ion-card-header ion-card-title ion-text {
+  color: var(--ion-color-primary-contrast);
+}
+
+/* Symmetric edge spacing for the grid container; does not change inter-card gaps */
+ion-grid.territory-grid {
+  padding-right: 24px;
+}
+
+/* Light theme: apply gray only to the wrapper's own header/content (not inner cards) */
+@media (prefers-color-scheme: light) {
+  /* Ensure the entire wrapper card uses the gray background */
+  .territories-wrapper {
+    background-color: var(--nec-gray-50);
+    --background: var(--nec-gray-50);
+  }
+
+  /* Edit Territory Modal: apply soft gray to form items */
+  ion-modal form ion-item {
+    background-color: var(--nec-gray-50);
+    --background: var(--nec-gray-50);
+  }
+
+}

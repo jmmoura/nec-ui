@@ -13,3 +13,17 @@ ion-content {
 
 .actions { margin-top: 16px; }
 .error { color: var(--ion-color-danger); margin-top: 8px; text-align: center; }
+
+/* Light theme: apply soft gray background to the login card */
+@media (prefers-color-scheme: light) {
+	.login-center ion-card {
+		background-color: var(--nec-gray-50);
+		--background: var(--nec-gray-50);
+	}
+
+	/* Match inner form items to the same gray */
+	.login-center ion-card ion-card-content form ion-item {
+		background-color: var(--nec-gray-50);
+		--background: var(--nec-gray-50);
+	}
+}

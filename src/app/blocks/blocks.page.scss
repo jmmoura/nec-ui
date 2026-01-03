@@ -42,6 +42,30 @@
   margin: 16px;
 }
 
+/* Dashboard uses primary across list and items */
+.dashboard ion-card {
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+}
+
+.dashboard ion-card ion-list {
+  background: var(--ion-color-primary);
+  --background: var(--ion-color-primary);
+}
+
+.dashboard ion-card ion-item {
+  background: var(--ion-color-primary);
+  --background: var(--ion-color-primary);
+  --inner-background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
+  --border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dashboard ion-card ion-item ion-label,
+.dashboard ion-card ion-item ion-note {
+  color: var(--ion-color-primary-contrast);
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -61,32 +85,121 @@ th {
 .fixed-width-table {
   width: 100%;
   border-collapse: collapse;
+  /* Allow natural auto-layout so columns fit content */
+  table-layout: auto;
 
   th,
   td {
     text-align: center;
     padding: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid rgba(var(--ion-color-primary-rgb), 0.2);
   }
 
   th {
-    background-color: #f4f4f4;
+    background-color: var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
   }
 
-  /* Fixed column widths */
-  .number-column {
-    width: 10%; /* Adjust as needed */
+  /* Lighter font color for table rows */
+  td {
+    color: var(--ion-text-color);
   }
 
-  .visited-column {
-    width: 25%; /* Adjust as needed */
-  }
-
-  .date-column {
-    width: 35%; /* Adjust as needed */
-  }
-
+  /* Explicit lighter color for houses information columns */
+  .number-column,
+  .visited-column,
+  .date-column,
   .time-column {
-    width: 20%; /* Adjust as needed */
+    color: var(--ion-text-color);
+  }
+
+  /* Lighten ion-checkbox accents in the visited column */
+  .visited-column ion-checkbox {
+    --background: transparent;
+    --border-color: var(--ion-text-color);
+    --checkmark-color: var(--ion-text-color);
+  }
+
+  /* Light theme: ensure darker text and line contrast */
+}
+
+/* Scroll container for the houses table to avoid overflow on small devices */
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Compact table spacing on very small screens */
+@media (max-width: 480px) {
+  .fixed-width-table th,
+  .fixed-width-table td {
+    padding: 6px 8px;
+    font-size: 0.9rem;
+  }
+  .fixed-width-table .date-column,
+  .fixed-width-table .time-column {
+    white-space: nowrap;
+  }
+}
+
+
+@media (prefers-color-scheme: light) {
+  /* Header: white text on primary background */
+  .fixed-width-table th,
+  table.fixed-width-table > thead > tr > th {
+    background-color: var(--ion-color-primary);
+    color: #ffffff !important;
+  }
+  /* Ensure any nested elements inside header are white too */
+  .fixed-width-table th *,
+  table.fixed-width-table > thead > tr > th * {
+    color: #ffffff !important;
+  }
+
+  /* Darker body text for better readability in light theme */
+  .fixed-width-table td,
+  .fixed-width-table .number-column,
+  .fixed-width-table .visited-column,
+  .fixed-width-table .date-column,
+  .fixed-width-table .time-column {
+    color: #000000 !important;
+  }
+
+  /* Darker table lines/borders for clear separation */
+  .fixed-width-table th,
+  .fixed-width-table td {
+    border-color: var(--ion-color-primary) !important;
+  }
+
+  .fixed-width-table .visited-column ion-checkbox {
+    --border-color: var(--ion-color-primary);
+    --checkmark-color: #ffffff !important;
+  }
+
+  /* Subtle light gray background for table body rows */
+  .fixed-width-table tbody tr {
+    background-color: var(--nec-gray-50); /* very light gray */
+  }
+
+  .fixed-width-table tbody tr:nth-child(even) {
+    background-color: var(--nec-gray-100); /* slightly darker for zebra striping */
+  }
+
+  /* Apply light gray to street card header and content (inside the grid only) */
+  ion-grid ion-card ion-card-header,
+  ion-grid ion-card ion-card-content {
+    background-color: var(--nec-gray-50);
+  }
+
+  /* Ensure street title remains readable on gray background */
+  ion-grid ion-card ion-card-header ion-card-title {
+    color: #000000;
+  }
+
+  /* Let columns size to their content; prevent wrapping for compact fields */
+  .date-column,
+  .time-column {
+    white-space: nowrap;
   }
 }
