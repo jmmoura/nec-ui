@@ -6,8 +6,13 @@ import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptorService } from './app/service/authentication/auth-interceptor.service';
-import { isDevMode } from '@angular/core';
+import { isDevMode, LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
 import { provideServiceWorker } from '@angular/service-worker';
+
+// Register Portuguese (Brazil) locale data
+registerLocaleData(localePt, 'pt-BR');
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -15,7 +20,9 @@ bootstrapApplication(AppComponent, {
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideHttpClient(withInterceptorsFromDi()),
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }, provideServiceWorker('ngsw-worker.js', {
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
+    provideServiceWorker('ngsw-worker.js', {
             enabled: !isDevMode(),
             registrationStrategy: 'registerWhenStable:30000'
           })
