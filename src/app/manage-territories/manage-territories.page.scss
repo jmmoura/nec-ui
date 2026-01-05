@@ -6,8 +6,20 @@ ion-grid {
   margin-top: 16px;
 }
 
+/* Make buttons larger with comfortable touch targets */
 ion-button {
   margin-right: 8px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  min-height: 44px; /* ~48px on iOS depending on theme */
+  font-size: 1rem; /* slightly larger label */
+}
+
+/* Increase vertical spacing between consecutive buttons (e.g., Reset vs Save) */
+ion-button + ion-button {
+  margin-top: 16px;
 }
 
 /* Styling for territory cards only */
@@ -40,7 +52,9 @@ ion-grid.territory-grid ion-col ion-card-content {
 /* Styles for generated link area inside edit modal */
 .link-section {
   margin-top: 12px;
+  margin-bottom: 16px; /* consistent space below link section */
 }
+/* rely on consistent button margins; no adjacent-specific spacing needed */
 
 .generated-link .generated-link-item {
   display: flex;
@@ -67,10 +81,18 @@ ion-grid.territory-grid ion-col ion-card-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-top: 8px;
+  gap: 12px; /* more space between share/copy buttons */
+  margin-top: 12px;
   flex-wrap: wrap;
   width: 100%;
+}
+
+/* Ensure icon-only buttons also have a bigger tap area */
+.generated-link .link-actions-below ion-button {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  min-height: 44px;
+  margin-right: 0; /* neutralize global right margin for equal gaps */
 }
 
 /* Light theme: soft gray background for the generated link item in edit modal */

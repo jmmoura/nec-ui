@@ -1,8 +1,6 @@
 import { Component, forwardRef, Inject, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-
-// Import standalone Ionic components
 import {
   IonList,
   IonModal,
@@ -29,8 +27,12 @@ import {
   IonSelectOption,
   IonText,
   IonIcon,
-  ToastController
+  ToastController,
+  AlertController
 } from "@ionic/angular/standalone";
+import { Share } from '@capacitor/share';
+import { addIcons } from 'ionicons';
+import { shareOutline, logoWhatsapp, mailOutline } from 'ionicons/icons';
 
 import { TerritoryAssignment } from "../model/TerritoryAssignment";
 import { AssignmentService } from "../service/assignment/assignment.service";
@@ -42,9 +44,6 @@ import { LinkRequest } from "../model/LinkRequest";
 import { AuthService } from "../service/authentication/auth.service";
 import { DateOrderDirective } from "../shared/validators/date-order.directive";
 import { AddressService } from "../service/address/address.service";
-import { Share } from '@capacitor/share';
-import { addIcons } from 'ionicons';
-import { shareOutline, logoWhatsapp, mailOutline } from 'ionicons/icons';
 
 @Component({
   selector: "app-manage-territories",
@@ -110,6 +109,7 @@ export class ManageTerritoriesPage implements OnInit {
     private linkGeneratorSvc: LinkGeneratorService,
     private authService: AuthService,
     private toastCtrl: ToastController,
+    private alertCtrl: AlertController,
     private addressSvc: AddressService,
   ) {
       addIcons({shareOutline,logoWhatsapp,mailOutline});}
@@ -363,18 +363,33 @@ export class ManageTerritoriesPage implements OnInit {
     window.location.href = mailtoUrl;
   }
 
-  resetVisitedHousesForSelectedTerritory() {
+  async resetVisitedHousesForSelectedTerritory() {
     if (!this.selectedTerritory || !this.selectedTerritory.territoryNumber) {
       return;
     }
+
+    const alert = await this.alertCtrl.create({
+      header: 'Confirmar',
+      message: 'Tem certeza que deseja desmarcar todas as casas deste território?',
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        { text: 'Confirmar', role: 'confirm' },
+      ],
+    });
+    await alert.present();
+    const { role } = await alert.onDidDismiss();
+    if (role !== 'confirm') {
+      return;
+    }
+
     const territoryNumber = this.selectedTerritory.territoryNumber;
     this.addressSvc.resetAddress({ territoryNumber }).subscribe({
       next: () => {
-        this.showToast("Casas desmarcadas.", "success");
+        this.showToast('Casas desmarcadas.', 'success');
       },
       error: (err: any) => {
-        console.error("Failed to reset visited houses", err);
-        this.showToast("Falha ao desmarcar casas.", "danger");
+        console.error('Failed to reset visited houses', err);
+        this.showToast('Falha ao desmarcar casas.', 'danger');
         if (err.status === 401 || err.status === 403) {
           this.isEditTerritoryModalOpen = false;
           this.authService.logout();
